@@ -19,7 +19,7 @@
     "url": "https://github.com/AttackPattern/node-kafka-cqrs-lib/issues"
   },
   "homepage": "https://github.com/AttackPattern/node-kafka-cqrs-lib#readme",
-  "peerDependencies": {
+  "dependencies": {
     "kafka-node": "~1.3.0",
     "koa-router": "~7.1.0"
   },
