@@ -1,5 +1,5 @@
 {
-  "name": "node-kafka-cqrs-lib",
+  "name": "node-cqrs-lib",
   "version": "1.0.0",
   "description": "Library of base classes for Node.js and Kafka implementations with CQRS",
   "main": "index.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AttackPattern/node-kafka-cqrs-lib.git"
+    "url": "git+https://github.com/AttackPattern/node-cqrs-lib.git"
   },
   "author": "Adam Eilers <adame@attackpattern.com>",
   "license": "MIT",
@@ -16,9 +16,9 @@
     "node": ">=6.9.4"
   },
   "bugs": {
-    "url": "https://github.com/AttackPattern/node-kafka-cqrs-lib/issues"
+    "url": "https://github.com/AttackPattern/node-cqrs-lib/issues"
   },
-  "homepage": "https://github.com/AttackPattern/node-kafka-cqrs-lib#readme",
+  "homepage": "https://github.com/AttackPattern/node-cqrs-lib#readme",
   "devDependencies": {
     "babel-cli": "~6.18.0",
     "babel-core": "~6.21.0",
