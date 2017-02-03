@@ -1,22 +1,44 @@
+const CACHE = Symbol('data cache for local processing');
+
 export default class Aggregate {
 
-  constructor(id) {
-    this.cache = {
-      id,
-      sequence: 0
+  constructor(id, data) {
+    this[CACHE] = { id, sequence: 0 };
+
+    this.setCache(data);
+  }
+
+  /*
+   * getters/setters
+   */
+  setCache(data) {
+    this[CACHE] = this.apply(this.sanitize(data));
+  }
+
+  getCache() {
+    return this[CACHE];
+  }
+
+  applyEvent(data) {
+    return this.apply(this.sanitize(data));
+  }
+
+  /*
+   * utility methods
+   */
+  apply(data) {
+    return {
+      ...this[CACHE],
+      ...data,
+      sequence: ++this[CACHE].sequence
     };
   }
 
-  setCache(cache) {
-    this.cache = cache;
-  }
+  sanitize(data) {
+    if (data.name) delete data.name;
+    if (data.type) delete data.type;
 
-  applyChange(event) {
-    this.cache = {
-      ...event,
-      id: this.cache.id,
-      sequence: ++this.cache.sequence
-    };
+    return data;
   }
 
 }
