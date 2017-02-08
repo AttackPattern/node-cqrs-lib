@@ -1,9 +1,10 @@
-const CACHE = Symbol('data cache for local processing');
+export const CACHE = Symbol('data cache for local processing');
 
-export default class Aggregate {
+
+export class Aggregate {
 
   constructor(id, data) {
-    this[CACHE] = { id, sequence: 0 };
+    this[CACHE] = { id, sequence: -1 };
 
     this.setCache(data);
   }
@@ -20,6 +21,8 @@ export default class Aggregate {
   }
 
   applyEvent(data) {
+    this[CACHE].sequence++;
+
     return this.apply(this.sanitize(data));
   }
 
@@ -29,8 +32,7 @@ export default class Aggregate {
   apply(data) {
     return {
       ...this[CACHE],
-      ...data,
-      sequence: ++this[CACHE].sequence
+      ...data
     };
   }
 
@@ -39,6 +41,10 @@ export default class Aggregate {
     if (data.type) delete data.type;
 
     return data;
+  }
+
+  validate() {
+    return true;
   }
 
 }
