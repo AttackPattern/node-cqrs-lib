@@ -33,7 +33,7 @@ export class Handler {
     }
   }
 
-  handleEvent = async (data) => {
+  handleEvent = async () => {
     throw new Error('handleEvent has not been implemented');
   }
 
