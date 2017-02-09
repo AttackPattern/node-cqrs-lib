@@ -76,8 +76,12 @@ function buildScripts() {
 /*******************************************************************************
  * Runner(s)
  ******************************************************************************/
-function runClean() {
+function runCleanAll() {
     return del(BUILD_CONFIG.OUTPUT_DEL);
+}
+
+function runCleanScripts() {
+    return del(BUILD_CONFIG.OUTPUT_SCRIPTS);
 }
 
 function runWatch() {
@@ -97,8 +101,10 @@ gulp.task('default', [
 ], runWatch);
 
 // main task runners
-gulp.task(`${RUN}${CLEAN}${ALL}`, runClean);
+gulp.task(`${RUN}${CLEAN}${ALL}`, runCleanAll);
+gulp.task(`${RUN}${CLEAN}${SCRIPTS}`, runCleanScripts);
 gulp.task(`${RUN}${SCRIPTS}`, [
+    `${RUN}${CLEAN}${SCRIPTS}`,
     `${LINT}${SCRIPTS}`,
     `${INSTRUMENT}${SCRIPTS}`,
     `${TEST}${SCRIPTS}`,
