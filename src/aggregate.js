@@ -1,12 +1,11 @@
 export const CACHE = Symbol('data cache for local processing');
 
-
-export class Aggregate {
+export default class Aggregate {
 
   constructor(id, data) {
     this[CACHE] = { id, sequence: -1 };
 
-    this.setCache(data);
+    if (data) this.setCache(data);
   }
 
   /*
