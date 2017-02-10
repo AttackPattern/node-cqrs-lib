@@ -1,40 +1,43 @@
-export const REPOSITORY = Symbol('reference to repository interface');
+import uuidV4 from 'uuid/v4';
+
+
 export const AGGREGATE = Symbol('reference to aggregate class');
 export const COMMAND = Symbol('reference to command class');
 export const EVENT = Symbol('reference to event class');
 
+export default class Handler {
 
-export class Handler {
-
-  constructor(repository, Aggregate, Command, Event) {
-    this[REPOSITORY] = repository;
+  constructor(Aggregate, Command, Event) {
     this[AGGREGATE] = Aggregate;
     this[COMMAND] = Command;
     this[EVENT] = Event;
   }
 
-  handleCommand = async (id, command) => {
-    try {
-      this[REPOSITORY].watch(id);
-
-      const cmd = new this[COMMAND](command);
-      const agg = await this[REPOSITORY].get(id, this[AGGREGATE]);
-
-      agg.validate(cmd);
-
-      await this[REPOSITORY].record(new this[EVENT](id, cmd));
-
-      return id;
+  handle = async (id, command, aggregate) => {
+    if (command.validate() && aggregate.validate(command)) {
+      await this.execute(command, aggregate);
     }
-    catch (error) {
-      this[REPOSITORY].forget(id);
 
-      throw new Error(error);
-    }
+    return new this[EVENT](id, command);
   }
 
-  handleEvent = async () => {
-    throw new Error('handleEvent has not been implemented');
+  handleCreate = async (command) => {
+    const id = uuidV4();
+
+    const cmd = new this[COMMAND](command);
+    const aggregate = new this[AGGREGATE](id);
+
+    return await this.handle(id, cmd, aggregate);
+  }
+
+  handleCommand = async (id, command, aggregate) => {
+    const cmd = new this[COMMAND](command);
+
+    return await this.handle(id, cmd, aggregate);
+  }
+
+  execute = async (command, aggregate) => {
+    return true;
   }
 
 }
