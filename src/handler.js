@@ -15,10 +15,8 @@ export default class Handler {
 
   handle = async (id, command, aggregate) => {
     if (command.validate() && aggregate.validate(command)) {
-      await this.execute(command, aggregate);
+      return await this.execute(id, command, aggregate);
     }
-
-    return new this[EVENT](id, command);
   }
 
   handleCreate = async (command) => {
@@ -36,8 +34,8 @@ export default class Handler {
     return await this.handle(id, cmd, aggregate);
   }
 
-  execute = async (command, aggregate) => {
-    return true;
+  execute = async (id, command, aggregate) => {
+    return new this[EVENT](id, command);
   }
 
 }
