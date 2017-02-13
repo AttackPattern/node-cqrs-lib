@@ -13,12 +13,15 @@
   "author": "Adam Eilers <adame@attackpattern.com>",
   "license": "MIT",
   "engines": {
-    "node": ">=6.9.4"
+    "node": ">=6.9.5"
   },
   "bugs": {
     "url": "https://github.com/AttackPattern/node-cqrs-lib/issues"
   },
   "homepage": "https://github.com/AttackPattern/node-cqrs-lib#readme",
+  "dependencies": {
+    "uuid": "~3.0.1"
+  },
   "devDependencies": {
     "babel-cli": "~6.18.0",
     "babel-core": "~6.21.0",
@@ -59,8 +62,5 @@
     "proxyquire": "~1.7.10",
     "sinon": "~1.17.7",
     "supertest": "~2.0.0"
-  },
-  "dependencies": {
-    "uuid": "^3.0.1"
   }
 }
