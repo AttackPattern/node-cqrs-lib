@@ -1,5 +1,11 @@
 export const CACHE = Symbol('data cache for local processing');
 
+/*
+ * NOTE: this is a Pseudo-classical Decorator implementation. It requires an Entity
+ *        to still be defined and get/set to be modified to take the data in CACHE
+ *        to instantiate/validate against the Entity respectively.
+ *        https://addyosmani.com/resources/essentialjsdesignpatterns/book/#decoratorpatternjavascript
+ */
 export default class Aggregate {
 
   constructor(id, data) {
