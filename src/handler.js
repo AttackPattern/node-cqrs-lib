@@ -13,7 +13,7 @@ export default class Handler {
 
     command.validate();
     aggregate.validate(command);
-    
+
     return await this.execute(id, command, aggregate);
   }
 
