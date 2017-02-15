@@ -1,5 +1,3 @@
-export const CACHE = Symbol('data cache for local processing');
-
 export default class Aggregate {
 
   constructor(id, data) {
