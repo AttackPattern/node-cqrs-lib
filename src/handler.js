@@ -11,7 +11,7 @@ export default class Handler {
   handle = async (id, commandData, aggregate) => {
     const command = new this[COMMAND](commandData);
 
-    command.validate();
+    await command.validate();
     aggregate.validate(command);
 
     return await this.execute(id, command, aggregate);
