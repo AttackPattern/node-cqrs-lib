@@ -29,7 +29,7 @@ export default class Aggregate {
       name: undefined,
       type: undefined,
       ...data
-    }
+    };
   }
 
   validate() {
