@@ -25,11 +25,10 @@ export default class Aggregate {
   }
 
   sanitize(data) {
-    return {
-      name: undefined,
-      type: undefined,
-      ...data
-    };
+    let cleanData = { ...data };
+    delete cleanData['name'];
+    delete cleanData['type'];
+    return cleanData;
   }
 
   validate() {
