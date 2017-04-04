@@ -2,19 +2,15 @@ export default class Aggregate {
 
   constructor(id, events = []) {
     this.id = id;
-
+    this.version = 0;
     this.applyEvents(events);
   }
 
   applyEvents(events) {
-    Array.reduce(events, e => {
+    events.reduce(e => {
       this.version++;
       return this.applyEvent(e);
     }, this);
-  }
-
-  getCache() {
-    return this;
   }
 
   applyEvent(event) {
@@ -26,9 +22,7 @@ export default class Aggregate {
   }
 
   sanitize(data) {
-    let cleanData = { ...data };
-    delete cleanData['name'];
-    delete cleanData['type'];
+    let { name, type, ...cleanData } = data;
     return cleanData;
   }
 
