@@ -1,3 +1,8 @@
+function sanitize(data) {
+  let { name, type, ...cleanData } = data;
+  return cleanData;
+}
+
 export default class Aggregate {
 
   constructor(id, events = []) {
@@ -7,23 +12,21 @@ export default class Aggregate {
   }
 
   applyEvents(events) {
-    events.reduce(e => {
-      this.version++;
-      return this.applyEvent(e);
+    events.forEach(e => {
+      if (e.sequenceNumber <= this.version) {
+        throw new Error('Event came out of sequence');
+      }
+      this.applyEvent(e);
+      this.version = e.sequenceNumber;
     }, this);
   }
 
   applyEvent(event) {
-    return this.applyData(event);
+    this.applyData(event);
   }
 
   applyData(data) {
-    return Object.assign(this, this.sanitize(data));
-  }
-
-  sanitize(data) {
-    let { name, type, ...cleanData } = data;
-    return cleanData;
+    Object.assign(this, sanitize(data));
   }
 
   validate() {
