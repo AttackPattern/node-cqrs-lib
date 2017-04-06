@@ -1,11 +1,9 @@
 export const COMMAND = Symbol('reference to command class');
-export const EVENT = Symbol('reference to event class');
 
-export default class Handler {
+export default class CommandHandler {
 
-  constructor(Command, Event) {
+  constructor(Command) {
     this[COMMAND] = Command;
-    this[EVENT] = Event;
   }
 
   handle = async(commandData, aggregate) => {
@@ -21,10 +19,6 @@ export default class Handler {
   }
 
   execute = async(command, aggregate) => {
-    return new this[EVENT]({
-      aggregateId: aggregate.id,
-      sequenceNumber: aggregate.version + 1,
-      ...command
-    });
+
   }
 }

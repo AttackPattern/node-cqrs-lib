@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import Aggregate from '../../src/aggregate.js';
 
-describe('Aggregate', function () {
+describe('Aggregate', () => {
 
   it('should have an initial sequence number of 0', () => {
     let aggregate = new Aggregate('abc');
