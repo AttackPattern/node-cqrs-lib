@@ -14,27 +14,26 @@ describe('Command Handler', () => {
     let handler = new CommandHandler(TestCommand_FailValidation);
 
     await expect(handler.handle({}, new TestAggregate())).to.be.rejectedWith('Failed Validation');
-  })
+  });
 
   it('should throw on a failed aggregate validation', async() => {
     let handler = new CommandHandler(TestCommand);
 
     await expect(handler.handle({}, new TestAggregate_FailsValidation())).to.be.rejectedWith('Failed Aggregate Validation');
-  })
+  });
 
   it('should apply events to aggregate', async() => {
     let handler = new CommandHandler(TestCommand);
 
     let aggregate = new TestAggregate();
-    console.log(aggregate.version);
 
     handler = new TestCommandHandler(TestCommand);
     await handler.handle(new TestCommand({ message: 'Successful test' }), aggregate);
 
     expect(aggregate.lastMessage).to.equal('Successful test');
 
-  })
-})
+  });
+});
 
 class TestCommandHandler extends CommandHandler {
   execute = async(command, aggregate) => [new TestEvent({ message: command.message })];

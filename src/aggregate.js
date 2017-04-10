@@ -1,8 +1,3 @@
-function sanitize(data) {
-  let { id, name, type, aggregateId, aggregate, timestamp, actor, ...cleanData } = data;
-  return cleanData;
-}
-
 export default class Aggregate {
 
   constructor(id, events = []) {
@@ -28,12 +23,6 @@ export default class Aggregate {
   }
 
   update(event) {
-    this.applyData(event);
-  }
-
-  // TODO: Most event data (like metadata) shouldn't be just applied directly to the aggregate. Remove this.
-  applyData(data) {
-    Object.assign(this, sanitize(data));
   }
 
   validate() {
