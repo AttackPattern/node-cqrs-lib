@@ -69,7 +69,7 @@ class TestAggregate extends Aggregate {
   constructor(id, events) {
     super(id, events)
   }
-  applyEvent(event) {
+  update(event) {
     switch (event.name) {
     case 'TestEvent':
       {

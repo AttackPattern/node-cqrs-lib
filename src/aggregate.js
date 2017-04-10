@@ -12,11 +12,12 @@ export default class Aggregate {
   }
 
   applyEvents(events) {
-    return events.map(e => {
+    // Accept one or an array of events
+    return (Array.isArray(events) ? events : [events]).map(e => {
       if (e.sequenceNumber && e.sequenceNumber <= this.version) {
         throw new Error('Event came out of sequence');
       }
-      this.applyEvent(e);
+      this.update(e);
 
       e.sequenceNumber = e.sequenceNumber || this.version + 1;
       e.aggregateId = e.aggregateId || this.id;
@@ -26,13 +27,11 @@ export default class Aggregate {
     });
   }
 
-  // TODO: Need a singular version of applyEvent, name the overrideable something different
-  // Probably update()
-  applyEvent(event) {
+  update(event) {
     this.applyData(event);
   }
 
-  // TODO: Too much event data shouldn't be just applied directly to the aggregate. Remove this.
+  // TODO: Most event data (like metadata) shouldn't be just applied directly to the aggregate. Remove this.
   applyData(data) {
     Object.assign(this, sanitize(data));
   }
