@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
 import Aggregate from '../../src/aggregate.js';
+import Event from '../../src/event';
 
 describe('Aggregate', () => {
 
@@ -29,5 +30,22 @@ describe('Aggregate', () => {
     let aggregate = new Aggregate('abc', [{ sequenceNumber: 1 }]);
     expect(() => aggregate.applyEvents([{sequenceNumber: 1}]))
       .to.throw(Error);
+  })
+
+  it('should set aggregate Id on new event', () => {
+    let aggregateId = 'abc';
+    let aggregate = new Aggregate(aggregateId);
+    let event = new Event();
+    aggregate.applyEvents([event]);
+
+    expect(event.aggregateId).to.equal(aggregateId);
+  })
+
+  it('should advance aggregate version when adding an event', () => {
+    let aggregate = new Aggregate('abc', [{ sequenceNumber: 2}]);
+    let event = new Event();
+    aggregate.applyEvents([ event ]);
+    expect(aggregate.version).to.equal(3);
+    expect(event.sequenceNumber).to.equal(3);
   })
 })

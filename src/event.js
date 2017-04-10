@@ -1,6 +1,6 @@
 export default class Event {
 
-  constructor(data) {
+  constructor(data = {}) {
     this.aggregate = data.aggregate;
     this.aggregateId = data.aggregateId;
     this.sequenceNumber = data.sequenceNumber;
