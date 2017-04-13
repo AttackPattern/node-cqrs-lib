@@ -1,34 +1,28 @@
 export default class Aggregate {
 
-  constructor(id, data) {
+  constructor(id, events = []) {
     this.id = id;
-    Object.assign(this, data);
+    this.version = 0;
+    this.applyEvents(events);
   }
 
   applyEvents(events) {
-    Array.reduce(events, e => {
-      this.version++;
-      return this.applyEvent(e);
-    }, this);
+    // Accept one or an array of events
+    return (Array.isArray(events) ? events : [events]).map(e => {
+      if (e.sequenceNumber && e.sequenceNumber <= this.version) {
+        throw new Error('Event came out of sequence');
+      }
+      this.update(e);
+
+      e.sequenceNumber = e.sequenceNumber || this.version + 1;
+      e.aggregateId = e.aggregateId || this.id;
+
+      this.version = e.sequenceNumber;
+      return e;
+    });
   }
 
-  getCache() {
-    return this;
-  }
-
-  applyEvent(event) {
-    return this.applyData(event);
-  }
-
-  applyData(data) {
-    return Object.assign(this, this.sanitize(data));
-  }
-
-  sanitize(data) {
-    let cleanData = { ...data };
-    delete cleanData['name'];
-    delete cleanData['type'];
-    return cleanData;
+  update(event) {
   }
 
   validate() {

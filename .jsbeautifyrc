@@ -24,7 +24,7 @@
     "selector_separator_newline": true
   },
   "js": {
-    "brace_style": "collapse",
+    "brace_style": "end-expand,preserve-inline",
     "break_chained_methods": false,
     "end_with_newline": true,
     "eol": "\n",

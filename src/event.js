@@ -1,13 +1,10 @@
-import Message from './message';
+export default class Event {
 
-export default class Event extends Message {
-  type = 'event';
-
-  constructor(id, data) {
-    super({ ...data, id });
-
-    this.sequence = data.sequence;
-    this.timestamp = new Date().toISOString();
+  constructor(data = {}) {
+    this.aggregate = data.aggregate;
+    this.aggregateId = data.aggregateId;
+    this.sequenceNumber = data.sequenceNumber;
+    this.timestamp = data.timestamp;
   }
 
 }
