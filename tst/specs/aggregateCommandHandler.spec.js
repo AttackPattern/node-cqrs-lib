@@ -56,7 +56,7 @@ class TestCommand extends Command {
 }
 
 class TestEvent extends Event {
-  name = 'TestEvent'
+  type = 'TestEvent'
 
   constructor(data = {}) {
     super(data);
@@ -66,10 +66,10 @@ class TestEvent extends Event {
 
 class TestAggregate extends Aggregate {
   constructor(id, events) {
-    super(id, events)
+    super(id, events);
   }
   update(event) {
-    switch (event.name) {
+    switch (event.type) {
     case 'TestEvent':
       {
         this.lastMessage = event.message;
