@@ -20,7 +20,8 @@
   },
   "homepage": "https://github.com/AttackPattern/node-cqrs-lib#readme",
   "dependencies": {
-    "uuid": "~3.0.1"
+    "uuid": "~3.0.1",
+    "node-fetch": "^1.6.3"
   },
   "devDependencies": {
     "babel-cli": "~6.18.0",
