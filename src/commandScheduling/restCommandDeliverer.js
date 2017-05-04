@@ -1,7 +1,7 @@
 import url from 'url';
 import fetch from 'node-fetch';
 
-export default class CommandSender {
+export default class RestCommandDeliverer {
 
   constructor(baseUrl) {
     this.baseUrl = url.parse(baseUrl + (baseUrl.endsWith('/') ? '' : '/'));
