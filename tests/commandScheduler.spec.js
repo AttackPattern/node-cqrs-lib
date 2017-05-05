@@ -7,6 +7,12 @@ import CommandScheduler from '../src/commandScheduling/commandScheduler';
 import ScheduledCommand from '../src/commandScheduling/scheduledCommand';
 
 describe('Command Scheduler', () => {
+  it('should contain commands supplied on initialization', () => {
+    let command = new ScheduledCommand(null, new Date(0), new VirtualClock());
+    let scheduler = new CommandScheduler(command);
+    expect(scheduler.commands).to.contain(command);
+  });
+
   it('should accept newly scheduled commands', () => {
     let scheduler = new CommandScheduler();
     let command = new ScheduledCommand(null, new Date(0), new VirtualClock());

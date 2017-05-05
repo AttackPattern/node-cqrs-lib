@@ -1,7 +1,7 @@
 export default class CommandScheduler {
 
-  constructor() {
-    this.commands = [];
+  constructor(commands = []) {
+    this.commands = commands;
   }
 
   schedule = command => {

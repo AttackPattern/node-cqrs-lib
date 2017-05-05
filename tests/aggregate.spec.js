@@ -22,13 +22,13 @@ describe('Aggregate', () => {
 
   it('should reject out-of-order events applied after construction', () => {
     let aggregate = new Aggregate('abc', [{ sequenceNumber: 3 }]);
-    expect(() => aggregate.applyEvents([{sequenceNumber: 1}]))
+    expect(() => aggregate.applyEvents([{ sequenceNumber: 1 }]))
       .to.throw(Error);
   });
 
   it('should reject duplicate event sequence number', () => {
     let aggregate = new Aggregate('abc', [{ sequenceNumber: 1 }]);
-    expect(() => aggregate.applyEvents([{sequenceNumber: 1}]))
+    expect(() => aggregate.applyEvents([{ sequenceNumber: 1 }]))
       .to.throw(Error);
   });
 
@@ -42,9 +42,9 @@ describe('Aggregate', () => {
   });
 
   it('should advance aggregate version when adding an event', () => {
-    let aggregate = new Aggregate('abc', [{ sequenceNumber: 2}]);
+    let aggregate = new Aggregate('abc', [{ sequenceNumber: 2 }]);
     let event = new Event();
-    aggregate.applyEvents([ event ]);
+    aggregate.applyEvents([event]);
     expect(aggregate.version).to.equal(3);
     expect(event.sequenceNumber).to.equal(3);
   });
