@@ -11,7 +11,7 @@ export default class CommandScheduler {
   commandsDue = now => this.commands.filter(cmd => cmd.isDue(now))
 
   deliverDueCommands = async(now) => {
-    let commands = this.commandScheduler.commandsDue(now);
+    let commands = this.commandsDue(now);
     await commands.map(async cmd => await cmd.deliver());
   }
 

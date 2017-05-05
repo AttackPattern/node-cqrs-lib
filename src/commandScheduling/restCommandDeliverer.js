@@ -1,10 +1,10 @@
 import url from 'url';
-import fetch from 'node-fetch';
 
 export default class RestCommandDeliverer {
 
-  constructor(baseUrl) {
+  constructor(baseUrl, fetch) {
     this.baseUrl = url.parse(baseUrl + (baseUrl.endsWith('/') ? '' : '/'));
+    this.fetch = fetch;
   }
 
   formatCommandUrl(commandName) {
@@ -18,15 +18,13 @@ export default class RestCommandDeliverer {
   send = async(command) => {
     let commandUrl = this.formatCommandUrl(command.name);
 
-    let result = await fetch(commandUrl, {
+    let result = await this.fetch(commandUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(command)
     });
-
-    console.log(result);
     return result;
   }
 }
