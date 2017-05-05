@@ -2,7 +2,7 @@ import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 chai.use(chaiAsPromised);
 
-import VirtualClock from './virtualClock.js';
+import VirtualClock from '../testSupport/virtualClock.js';
 import ScheduledCommand from '../src/commandScheduling/scheduledCommand';
 
 describe('Scheduled Command', () => {

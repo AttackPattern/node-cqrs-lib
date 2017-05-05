@@ -2,14 +2,14 @@ import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 chai.use(chaiAsPromised);
 
-import VirtualClock from './virtualClock.js';
+import VirtualClock from '../testSupport/virtualClock.js';
 import CommandScheduler from '../src/commandScheduling/commandScheduler';
 import ScheduledCommand from '../src/commandScheduling/scheduledCommand';
 
 describe('Command Scheduler', () => {
   it('should contain commands supplied on initialization', () => {
     let command = new ScheduledCommand(null, new Date(0), new VirtualClock());
-    let scheduler = new CommandScheduler(command);
+    let scheduler = new CommandScheduler([command]);
     expect(scheduler.commands).to.contain(command);
   });
 
@@ -39,7 +39,7 @@ describe('Command Scheduler', () => {
   });
 
   describe('deliverDueCommands', () => {
-    it('should not prematurely deliver commands before they are due', async () => {
+    it('should not prematurely deliver commands before they are due', async() => {
       let scheduler = new CommandScheduler();
       let delivered = false;
       let command = new ScheduledCommand(null, new Date('5/2/2017'), new VirtualClock('5/1/2017'), { deliver: () => delivered = true });
@@ -47,8 +47,9 @@ describe('Command Scheduler', () => {
 
       await scheduler.deliverDueCommands();
       expect(delivered).to.be.false;
+      expect(scheduler.commandsDue()).to.not.contain(command);
     });
-    it('should deliver due commands', async () => {
+    it('should deliver due commands', async() => {
       let scheduler = new CommandScheduler();
       let delivered = false;
       let command = new ScheduledCommand(null, new Date('5/1/2017'), new VirtualClock('5/2/2017'), { deliver: () => delivered = true });
@@ -56,6 +57,14 @@ describe('Command Scheduler', () => {
 
       await scheduler.deliverDueCommands();
       expect(delivered).to.be.true;
+    });
+
+    it('should not contain delivered commands after deliver', async() => {
+      let command = new ScheduledCommand(null, new Date('5/1/2017'), new VirtualClock('5/2/2017'), { deliver: () => {} });
+      let scheduler = new CommandScheduler([command]);
+
+      await scheduler.deliverDueCommands();
+      expect(scheduler.commandsDue()).to.not.contain(command);
     });
   });
 });

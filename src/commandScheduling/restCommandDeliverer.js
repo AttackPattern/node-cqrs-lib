@@ -15,9 +15,8 @@ export default class RestCommandDeliverer {
     });
   }
 
-  send = async(command) => {
+  deliver = async(command) => {
     let commandUrl = this.formatCommandUrl(command.name);
-
     let result = await this.fetch(commandUrl, {
       method: 'POST',
       headers: {

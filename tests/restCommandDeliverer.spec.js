@@ -10,7 +10,7 @@ describe('Rest Command Deliverer', () => {
     let fetch = new VirtualFetch();
     let deliverer = new RestCommandDeliverer('http://baseurl', (url, options) => fetch.fetch(url, options));
     let command = new TestCommand('test');
-    deliverer.send(command);
+    deliverer.deliver(command);
 
     expect(fetch.calls[0].url).to.equal('http://baseurl/test');
   });

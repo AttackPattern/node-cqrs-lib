@@ -1,5 +1,3 @@
-import Clock from './clock';
-
-export default class RealWorldClock extends Clock {
+export default class RealWorldClock {
   now = () => new Date()
 }

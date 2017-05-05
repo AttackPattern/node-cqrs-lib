@@ -9,5 +9,5 @@ export default class ScheduledCommand {
 
   isDue = () => this.due <= this.clock.now();
 
-  deliver = async () => this.deliverer.deliver(this);
+  deliver = async() => this.deliverer.deliver(this.command);
 }

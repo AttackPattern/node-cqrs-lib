@@ -5,3 +5,4 @@ exports.Handler = require('./lib/easyCommandHandler');
 exports.Repository = require('./lib/repository');
 exports.ValidationError = require('./lib/validationError');
 
+exports.CommandScheduling = require('./lib/commandScheduling');
