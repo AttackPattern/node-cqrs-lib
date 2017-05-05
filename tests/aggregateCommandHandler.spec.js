@@ -3,11 +3,11 @@ import chaiAsPromised from 'chai-as-promised';
 chai.use(chaiAsPromised);
 
 import sinon from 'sinon';
-import Aggregate from '../../src/aggregate.js';
-import Command from '../../src/command.js';
-import Event from '../../src/event.js';
-import CommandHandler from '../../src/aggregateCommandHandler.js';
-import ValidationError from '../../src/validationError.js';
+import Aggregate from '../src/aggregate.js';
+import Command from '../src/command.js';
+import Event from '../src/event.js';
+import CommandHandler from '../src/aggregateCommandHandler.js';
+import ValidationError from '../src/validationError.js';
 
 describe('Command Handler', () => {
   it('should throw on a failed command validation', async() => {

@@ -1,6 +1,6 @@
 {
   "OUTPUT_DEL": [
-    "./tst/coverage/**/*"
+    "./coverage/**/*"
   ],
   "OUTPUT_SCRIPTS": "./lib",
 
@@ -14,7 +14,7 @@
     "presets": ["es2017"]
   },
 
-  "TST_UNIT": "./tst/specs/**/*.js",
+  "TST_UNIT": "./tests/**/*.js",
   "MOCHA": {
     "reporter": "spec"
   },
@@ -23,9 +23,9 @@
       "includeUntested": true
     },
     "WRITE": {
-      "dir": "./tst/coverage",
+      "dir": "./coverage",
       "reportOpts": {
-        "dir": "./tst/coverage"
+        "dir": "./coverage"
       }
     }
   }

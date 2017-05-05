@@ -2,9 +2,9 @@ import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 chai.use(chaiAsPromised);
 
-import Command from '../../src/command.js';
-import CommandHandler from '../../src/commandHandler.js';
-import ValidationError from '../../src/validationError.js';
+import Command from '../src/command.js';
+import CommandHandler from '../src/commandHandler.js';
+import ValidationError from '../src/validationError.js';
 
 describe('Command Handler', () => {
   it('should throw on a failed command validation', async() => {
