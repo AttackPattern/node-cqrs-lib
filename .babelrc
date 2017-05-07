@@ -3,7 +3,8 @@
     "add-module-exports",
     "transform-async-to-generator",
     "transform-class-properties",
-    "transform-object-rest-spread"
+    "transform-object-rest-spread",
+    "transform-decorators-legacy"
   ],
   "presets": [
     "es2015"
