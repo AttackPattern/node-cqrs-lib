@@ -20,10 +20,8 @@ export default class Repository {
 
   record = async events => {
     let store = await this.getStore();
-    await events.forEach(async event => {
-      let recordedEvent = await store.recordEvent(event);
-      await this.notifySubscribers(recordedEvent);
-    });
+    let recordedEvents = await store.record(events);
+    await this.notifySubscribers(recordedEvents);
   }
 
   notifySubscribers = async(events) => {
