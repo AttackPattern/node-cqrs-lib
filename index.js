@@ -7,3 +7,4 @@ exports.Repository = require('./lib/repository');
 exports.ValidationError = require('./lib/validationError');
 
 exports.CommandScheduling = require('./lib/commandScheduling');
+exports.Container = require('./lib/container');
