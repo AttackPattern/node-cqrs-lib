@@ -1,13 +1,11 @@
-export const COMMAND = Symbol('reference to command class');
-
 export default class CommandHandler {
 
   constructor(Command) {
-    this[COMMAND] = Command;
+    this.Command = Command;
   }
 
   handle = async(commandData) => {
-    const command = new this[COMMAND](commandData);
+    const command = new this.Command(commandData);
 
     await command.validate();
 
