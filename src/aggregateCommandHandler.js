@@ -1,13 +1,11 @@
-export const COMMAND = Symbol('reference to command class');
-
 export default class AggregateCommandHandler {
 
   constructor(Command) {
-    this[COMMAND] = Command;
+    this.Command = Command;
   }
 
   handle = async(commandData, aggregate) => {
-    const command = new this[COMMAND](commandData);
+    const command = new this.Command(commandData);
 
     await command.validate();
     // if (command.version != aggregate.version) {
