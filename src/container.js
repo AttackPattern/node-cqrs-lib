@@ -17,7 +17,7 @@ export default class Container {
   }
 }
 
-export function inject(args) {
+export function inject(...args) {
   return (Target, property, description) => {
     Target.__ctorArgs = args;
   };

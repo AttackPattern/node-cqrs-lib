@@ -33,16 +33,17 @@ describe('Container', () => {
     const container = new Container();
     container.register(TestDependency, () => new TestDependency('testDependency'));
 
-    let resolved = container.resolve(TestClass_ArgumentsConstructor);
+    let resolved = container.resolve(TestClass_WithDependencies);
 
     expect(resolved.dependency.name).to.equal('testDependency');
+    expect(resolved.testClass).to.be.instanceof(TestClass_EmptyConstructor);
   });
 
   it('should fill allow derived dependencies', () => {
     const container = new Container();
     container.register(TestDependency, () => new DerivedTestDependency('testDependency'));
 
-    let resolved = container.resolve(TestClass_ArgumentsConstructor);
+    let resolved = container.resolve(TestClass_WithDependencies);
 
     expect(resolved.dependency.name).to.equal('derived: testDependency');
   });
@@ -50,7 +51,7 @@ describe('Container', () => {
   it('should resolve unregistered dependency', () => {
     const container = new Container();
 
-    let resolved = container.resolve(TestClass_ArgumentsConstructor);
+    let resolved = container.resolve(TestClass_WithDependencies);
 
     expect(resolved.dependency).to.be.instanceof(TestDependency);
   });
@@ -72,9 +73,10 @@ class DerivedTestDependency extends TestDependency {
 class TestClass_EmptyConstructor {
 }
 
-@inject([TestDependency])
-class TestClass_ArgumentsConstructor {
-  constructor(dependency) {
+@inject(TestDependency, TestClass_EmptyConstructor)
+class TestClass_WithDependencies {
+  constructor(dependency, testClass) {
     this.dependency = dependency;
+    this.testClass = testClass;
   }
 }
