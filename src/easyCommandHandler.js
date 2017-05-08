@@ -13,3 +13,7 @@ export default class EasyCommandHandler extends AggregateCommandHandler {
       ...command
     });
 }
+
+export function factory(Command, Event) {
+  return () => new EasyCommandHandler(Command, Event);
+}
