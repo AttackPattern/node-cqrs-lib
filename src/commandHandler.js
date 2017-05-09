@@ -9,7 +9,8 @@ export default class CommandHandler {
 
     await command.validate();
 
-    return await this.execute(command);
+    let events = await this.execute(command);
+    return Array.isArray(events) ? events : [events];
   }
 
   execute = async(command) => {
