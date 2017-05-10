@@ -7,16 +7,16 @@ export default class RestCommandDeliverer {
     this.fetch = fetch;
   }
 
-  formatCommandUrl(target, commandName) {
+  formatCommandUrl({ service, target, command }) {
     return url.format({
       protocol: this.baseUrl.protocol,
       host: this.baseUrl.host,
-      pathname: `${this.baseUrl.pathname}${target ? target + '/' : ''}${commandName}`
+      pathname: `${this.baseUrl.pathname}${service ? service + '/' : ''}${target ? target + '/' : ''}${command}`
     });
   }
 
-  deliver = async(target, command) => {
-    let commandUrl = this.formatCommandUrl(target, command.name);
+  deliver = async({ service, target, command }) => {
+    let commandUrl = this.formatCommandUrl({ service, target, command: command.name });
     let result = await this.fetch(commandUrl, {
       method: 'POST',
       headers: {

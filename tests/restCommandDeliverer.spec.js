@@ -9,17 +9,17 @@ describe('Rest Command Deliverer', () => {
   it('should call to url with command name when no target', () => {
     let fetch = new VirtualFetch();
     let deliverer = new RestCommandDeliverer('http://baseurl', (url, options) => fetch.fetch(url, options));
-    deliverer.deliver(null, new TestCommand());
+    deliverer.deliver({ service: 'rest', target: undefined, command: new TestCommand() });
 
-    expect(fetch.calls[0].url).to.equal('http://baseurl/test');
+    expect(fetch.calls[0].url).to.equal('http://baseurl/rest/test');
   });
 
   it('should call to url with command name', () => {
     let fetch = new VirtualFetch();
     let deliverer = new RestCommandDeliverer('http://baseurl', (url, options) => fetch.fetch(url, options));
-    deliverer.deliver('abc123', new TestCommand());
+    deliverer.deliver({ service: 'rest', target: 'abc123', command: new TestCommand() });
 
-    expect(fetch.calls[0].url).to.equal('http://baseurl/abc123/test');
+    expect(fetch.calls[0].url).to.equal('http://baseurl/rest/abc123/test');
   });
 });
 

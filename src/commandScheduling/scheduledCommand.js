@@ -1,6 +1,7 @@
 export default class ScheduledCommand {
 
-  constructor(target, command, due, clock, deliverer) {
+  constructor({ service, target, command, due, clock, deliverer }) {
+    this.service = service;
     this.target = target;
     this.command = command;
     this.due = due;
@@ -10,5 +11,7 @@ export default class ScheduledCommand {
 
   isDue = () => this.due <= this.clock.now();
 
-  deliver = async() => this.deliverer.deliver(this.target, this.command);
+  deliver = async() => {
+    this.deliverer.deliver({ service: this.service, target: this.target, command: this.command });
+  };
 }
