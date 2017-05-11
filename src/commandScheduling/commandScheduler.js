@@ -1,19 +1,24 @@
 export default class CommandScheduler {
 
-  constructor(commands = []) {
-    this.commands = commands;
+  constructor(getStore) {
+    this.getStore = getStore;
   }
 
-  schedule = command => {
-    this.commands.push(command);
+  schedule = async command => {
+    let store = await this.getStore();
+    store.push(command);
   }
 
-  commandsDue = now => this.commands.filter(cmd => cmd.isDue(now))
+  commandsDue = async now => {
+    let commands = await (await this.getStore()).commands();
+    return commands.filter(cmd => cmd.isDue(now));
+  }
 
   deliverDueCommands = async(now) => {
-    let dueCommands = this.commandsDue(now);
+    let dueCommands = await this.commandsDue(now);
     await dueCommands.map(async cmd => await cmd.deliver());
-    this.commands = this.commands.filter(cmd => !dueCommands.some(due => due === cmd));
+    let store = await this.getStore();
+    store.complete(dueCommands);
   }
 
 }
