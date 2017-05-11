@@ -35,7 +35,7 @@ describe('Container', () => {
 
     let resolved = container.resolve(TestClass_WithDependencies);
 
-    expect(resolved.dependency.name).to.equal('testDependency');
+    expect(resolved.dependency.message).to.equal('testDependency');
     expect(resolved.testClass).to.be.instanceof(TestClass_EmptyConstructor);
   });
 
@@ -45,7 +45,7 @@ describe('Container', () => {
 
     let resolved = container.resolve(TestClass_WithDependencies);
 
-    expect(resolved.dependency.name).to.equal('derived: testDependency');
+    expect(resolved.dependency.message).to.equal('derived: testDependency');
   });
 
   it('should resolve unregistered dependency', () => {
@@ -56,27 +56,41 @@ describe('Container', () => {
     expect(resolved.dependency).to.be.instanceof(TestDependency);
   });
 
+  it('should resolve named registration', () => {
+    const container = new Container();
+    container.register('message', () => 'test message');
+
+    let resolved = container.resolve(TestClass_WithStringRegisteredDependency);
+
+    expect(resolved.message).to.equal('test message');
+  });
 });
 
 class TestDependency {
-  constructor(name) {
-    this.name = name;
+  constructor(message) {
+    this.message = message;
   }
 }
 
 class DerivedTestDependency extends TestDependency {
-  constructor(name) {
-    super('derived: ' + name);
+  constructor(message) {
+    super('derived: ' + message);
   }
 }
 
-class TestClass_EmptyConstructor {
-}
+class TestClass_EmptyConstructor {}
 
 @inject(TestDependency, TestClass_EmptyConstructor)
 class TestClass_WithDependencies {
   constructor(dependency, testClass) {
     this.dependency = dependency;
     this.testClass = testClass;
+  }
+}
+
+@inject('message')
+class TestClass_WithStringRegisteredDependency {
+  constructor(message) {
+    this.message = message;
   }
 }
