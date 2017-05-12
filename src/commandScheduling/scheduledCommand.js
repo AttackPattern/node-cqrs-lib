@@ -1,6 +1,7 @@
 export default class ScheduledCommand {
 
-  constructor({ service, target, command, due, clock }) {
+  constructor({ id, service, target, command, due, clock }) {
+    this.id = id;
     this.service = service;
     this.target = target;
     this.command = command;
