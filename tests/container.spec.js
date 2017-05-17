@@ -64,6 +64,13 @@ describe('Container', () => {
 
     expect(resolved.message).to.equal('test message');
   });
+
+  it('should gracefully fail unregistered named registration', () => {
+    const container = new Container();
+
+    expect(() => container.resolve(TestClass_WithStringRegisteredDependency))
+      .to.throw(Error, 'Registration not found: "message"');
+  });
 });
 
 class TestDependency {
