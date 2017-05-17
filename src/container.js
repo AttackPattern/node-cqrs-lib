@@ -13,7 +13,7 @@ export default class Container {
     }
 
     if (!(Target instanceof constructor)) {
-      throw new Error(`Registration not found - "${Target}"`);
+      throw new Error(`Registration not found: "${Target}"`);
     }
 
     let args = (Target.__ctorArgs || []).map(arg => this.resolve(arg));
