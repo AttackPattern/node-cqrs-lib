@@ -12,7 +12,7 @@ export default class Aggregate {
       if (e.sequenceNumber && e.sequenceNumber <= this.version) {
         throw new Error('Event came out of sequence');
       }
-      this.update(e);
+      e.update(this);
 
       e.sequenceNumber = e.sequenceNumber || this.version + 1;
       e.aggregateId = e.aggregateId || this.id;
@@ -20,9 +20,6 @@ export default class Aggregate {
       this.version = e.sequenceNumber;
       return e;
     });
-  }
-
-  update(event) {
   }
 
   validate() {

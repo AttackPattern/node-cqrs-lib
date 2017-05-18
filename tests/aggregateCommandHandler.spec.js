@@ -62,20 +62,15 @@ class TestEvent extends Event {
     super(data);
     this.message = data.message;
   }
+
+  update(aggregate) {
+    aggregate.lastMessage = this.message;
+  }
 }
 
 class TestAggregate extends Aggregate {
   constructor(id, events) {
     super(id, events);
-  }
-  update(event) {
-    switch (event.type) {
-    case 'TestEvent':
-      {
-        this.lastMessage = event.message;
-        break;
-      }
-    }
   }
 }
 

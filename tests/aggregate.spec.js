@@ -11,7 +11,7 @@ describe('Aggregate', () => {
   });
 
   it('should have version number of last event in sequence', () => {
-    let aggregate = new Aggregate('abc', [{ sequenceNumber: 1 }, { sequenceNumber: 3 }]);
+    let aggregate = new Aggregate('abc', [new Event({ sequenceNumber: 1 }), new Event({ sequenceNumber: 3 })]);
     expect(aggregate.version).to.equal(3);
   });
 
@@ -21,14 +21,14 @@ describe('Aggregate', () => {
   });
 
   it('should reject out-of-order events applied after construction', () => {
-    let aggregate = new Aggregate('abc', [{ sequenceNumber: 3 }]);
-    expect(() => aggregate.applyEvents([{ sequenceNumber: 1 }]))
+    let aggregate = new Aggregate('abc', [new Event({ sequenceNumber: 3 })]);
+    expect(() => aggregate.applyEvents([new Event({ sequenceNumber: 1 })]))
       .to.throw(Error);
   });
 
   it('should reject duplicate event sequence number', () => {
-    let aggregate = new Aggregate('abc', [{ sequenceNumber: 1 }]);
-    expect(() => aggregate.applyEvents([{ sequenceNumber: 1 }]))
+    let aggregate = new Aggregate('abc', [new Event({ sequenceNumber: 1 })]);
+    expect(() => aggregate.applyEvents([new Event({ sequenceNumber: 1 })]))
       .to.throw(Error);
   });
 
@@ -42,7 +42,7 @@ describe('Aggregate', () => {
   });
 
   it('should advance aggregate version when adding an event', () => {
-    let aggregate = new Aggregate('abc', [{ sequenceNumber: 2 }]);
+    let aggregate = new Aggregate('abc', [new Event({ sequenceNumber: 2 })]);
     let event = new Event();
     aggregate.applyEvents([event]);
     expect(aggregate.version).to.equal(3);

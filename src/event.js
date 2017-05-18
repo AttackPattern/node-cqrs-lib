@@ -7,4 +7,5 @@ export default class Event {
     this.timestamp = data.timestamp;
   }
 
+  update(aggregate) {}
 }
