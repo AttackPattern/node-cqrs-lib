@@ -8,10 +8,7 @@ export default class AggregateCommandHandler {
     const command = new this.Command(commandData);
 
     await command.validate();
-    // if (command.version != aggregate.version) {
-    //   throw new ValidationError(aggregate, command, "Command being issued against incorrect version of aggregate");
-    // }
-    aggregate.validate(command);
+    this.validate(command, aggregate);
 
     let events = await this.execute(command, aggregate) || [];
     if (!Array.isArray(events)) {
@@ -24,4 +21,6 @@ export default class AggregateCommandHandler {
   execute = async(command, aggregate) => {
 
   }
+
+  validate(command, aggregate) { }
 }

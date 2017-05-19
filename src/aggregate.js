@@ -21,8 +21,4 @@ export default class Aggregate {
       return e;
     });
   }
-
-  validate() {
-    return true;
-  }
 }
