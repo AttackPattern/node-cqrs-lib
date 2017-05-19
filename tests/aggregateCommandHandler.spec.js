@@ -40,7 +40,7 @@ class TestCommandHandler extends CommandHandler {
 
 class TestCommand_FailValidation extends Command {
   validate = async() => {
-    throw new ValidationError(null, this, 'Failed Validation');
+    throw new ValidationError({ command: this, message: 'Failed Validation' });
   }
 }
 
@@ -74,6 +74,6 @@ class TestAggregate extends Aggregate {
 
 class CommandHandler_FailsValidation extends CommandHandler {
   validate = (command, aggregate) => {
-    throw new ValidationError(aggregate, command, 'Failed Aggregate Validation');
+    throw new ValidationError({ aggregate, command, message: 'Failed Aggregate Validation' });
   }
 }

@@ -1,6 +1,6 @@
 export default class ValidationError extends Error {
 
-    constructor(aggregate, command, message) {
+    constructor({ aggregate, command, message }) {
         super(message);
 
         this.name = 'ValidationError';
