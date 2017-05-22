@@ -24,7 +24,7 @@ describe('Rest Command Deliverer', () => {
 });
 
 class TestCommand extends Command {
-  name = 'test'
+  type = 'test'
 }
 
 class VirtualFetch {
