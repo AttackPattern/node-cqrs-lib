@@ -1,6 +1,7 @@
 exports.Aggregate = require('./lib/aggregate');
 exports.Command = require('./lib/command');
 exports.Event = require('./lib/event');
+exports.Identity = require('./lib/identity');
 exports.BasicHandler = require('./lib/basicCommandHandler');
 exports.CommandHandler = require('./lib/commandHandler');
 exports.AggregateCommandHandler = require('./lib/aggregateCommandHandler');

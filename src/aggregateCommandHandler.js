@@ -10,10 +10,12 @@ export default class AggregateCommandHandler {
     await command.validate();
     this.validate(command, aggregate);
 
-    let events = await this.execute(command, aggregate) || [];
-    if (!Array.isArray(events)) {
-      events = [events];
-    }
+    let events = asArray(await this.execute(command, aggregate));
+
+    events.forEach(event => {
+      event.actor = command.$identity && command.$identity.userId;
+      event.position = command.$position;
+    });
 
     return aggregate.applyEvents(events);
   }
@@ -23,4 +25,8 @@ export default class AggregateCommandHandler {
   }
 
   validate(command, aggregate) { }
+}
+
+function asArray(events = []) {
+  return Array.isArray(events) ? events : [events];
 }

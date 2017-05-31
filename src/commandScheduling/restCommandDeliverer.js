@@ -1,4 +1,5 @@
 import url from 'url';
+import Identity from '../identity';
 
 export default class RestCommandDeliverer {
 
@@ -20,7 +21,8 @@ export default class RestCommandDeliverer {
     let result = await this.fetch(commandUrl, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'authorization': Identity.system.toAuthHeader()
       },
       body: JSON.stringify(command)
     });
