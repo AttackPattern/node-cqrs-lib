@@ -5,6 +5,8 @@ export default class Event {
     this.aggregateId = data.aggregateId;
     this.sequenceNumber = data.sequenceNumber;
     this.timestamp = data.timestamp;
+    this.actor = data.actor;
+    this.position = data.position;
   }
 
   update(aggregate) {}
