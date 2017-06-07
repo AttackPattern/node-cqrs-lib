@@ -11,7 +11,8 @@ export default class Repository {
   get = async(aggregateId) => {
     let events = await (await this.getStore()).getEvents(aggregateId);
     if (!events.length) {
-      throw new Error(`Aggregate ${aggregateId} not found`);
+      console.log(`Aggregate ${aggregateId} not found`);
+      return null;
     }
     return new this.Ctor(aggregateId, events);
   }
