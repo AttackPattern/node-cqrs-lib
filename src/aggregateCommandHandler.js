@@ -8,6 +8,7 @@ export default class AggregateCommandHandler {
     const command = new this.Command(commandData);
 
     await command.validate();
+    await this.authorize(command, aggregate);
     this.validate(command, aggregate);
 
     let events = asArray(await this.execute(command, aggregate));
@@ -22,6 +23,10 @@ export default class AggregateCommandHandler {
 
   execute = async(command, aggregate) => {
 
+  }
+
+  authorize = async (command, aggregate) => {
+    return true;
   }
 
   validate(command, aggregate) { }

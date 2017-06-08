@@ -8,6 +8,7 @@ export default class CommandHandler {
     const command = new this.Command(commandData);
 
     await command.validate();
+    await this.authorize(command);
 
     let events = asArray(await this.execute(command));
 
@@ -20,6 +21,10 @@ export default class CommandHandler {
 
   execute = async(command) => {
 
+  }
+
+  authorize = async(command) => {
+    return true;
   }
 }
 
