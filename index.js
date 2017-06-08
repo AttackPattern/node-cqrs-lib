@@ -7,6 +7,7 @@ exports.CommandHandler = require('./lib/commandHandler');
 exports.AggregateCommandHandler = require('./lib/aggregateCommandHandler');
 exports.Repository = require('./lib/repository');
 exports.ValidationError = require('./lib/validationError');
+exports.AuthorizationError = require('./lib/authorizationError');
 
 exports.CommandScheduling = require('./lib/commandScheduling');
 exports.Container = require('./lib/container').default;
