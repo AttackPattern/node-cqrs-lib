@@ -22,7 +22,7 @@ export default class RestCommandDeliverer {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'authorization': Identity.system.toAuthHeader()
+        authorization: Identity.system.toAuthHeader()
       },
       body: JSON.stringify(command)
     });
