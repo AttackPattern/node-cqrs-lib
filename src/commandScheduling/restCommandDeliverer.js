@@ -22,7 +22,8 @@ export default class RestCommandDeliverer {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        authorization: Identity.system.toAuthHeader()
+        authorization: Identity.system.toAuthHeader(),
+        position: command.$position && new Buffer(JSON.stringify(command.$position)).toString('base64')
       },
       body: JSON.stringify(command)
     });
