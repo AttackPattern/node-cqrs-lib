@@ -27,6 +27,6 @@ export default class RestCommandDeliverer {
       },
       body: JSON.stringify(command)
     });
-    return result;
+    return result.json();
   }
 }
