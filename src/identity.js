@@ -1,11 +1,9 @@
 export default class Identity {
   constructor(data = {}) {
     this.username = data.username;
+    this.userId = data.userId;
     this.responderId = data.responderId;
     this.claims = data.claims;
-
-    // TODO (brett) - This should be an actual user id
-    this.userId = data.userId || data.responderId;
   }
 
   static anonymous = new Identity({
