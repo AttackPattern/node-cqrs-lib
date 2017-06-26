@@ -4,6 +4,10 @@ export default class Container {
   }
 
   register = (Target, factory) => {
+    if (typeof factory !== 'function') {
+      throw new Error(`Container registration '${Target}' was not a function`);
+    }
+
     this.registrations[Target] = factory;
   }
 

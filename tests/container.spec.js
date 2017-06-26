@@ -71,6 +71,13 @@ describe('Container', () => {
     expect(() => container.resolve(TestClass_WithStringRegisteredDependency))
       .to.throw(Error, 'Registration not found: "message"');
   });
+
+  it('should throw when registering a non-function factory', () => {
+    const container = new Container();
+
+    expect(() => container.register('non-function'))
+      .to.throw(Error, 'Container registration \'non-function\' was not a function');
+  });
 });
 
 class TestDependency {

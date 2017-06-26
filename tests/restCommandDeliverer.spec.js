@@ -33,5 +33,8 @@ class VirtualFetch {
   }
   fetch = async(url, options) => {
     this.calls.push({ url: url, options: options });
+    return {
+      json: () => {}
+    };
   }
 }
