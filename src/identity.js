@@ -2,7 +2,6 @@ export default class Identity {
   constructor(data = {}) {
     this.username = data.username;
     this.userId = data.userId;
-    this.responderId = data.responderId;
     this.claims = data.claims;
   }
 
