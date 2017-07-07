@@ -13,10 +13,6 @@ export default class Identity {
     userId: 'system'
   })
 
-  toAuthHeader() {
-    return new Buffer(JSON.stringify(this)).toString('base64');
-  }
-
   isSystem() {
     return this.userId === Identity.system.userId;
   }

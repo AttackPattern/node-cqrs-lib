@@ -3,9 +3,10 @@ import Identity from '../identity';
 
 export default class RestCommandDeliverer {
 
-  constructor(baseUrl, fetch) {
+  constructor(baseUrl, fetch, getSystemIdentity) {
     this.baseUrl = url.parse(baseUrl + (baseUrl.endsWith('/') ? '' : '/'));
     this.fetch = fetch;
+    this.getSystemIdentity = getSystemIdentity;
   }
 
   formatCommandUrl({ service, target, command }) {
@@ -18,15 +19,16 @@ export default class RestCommandDeliverer {
 
   deliver = async({ service, target, command }) => {
     let commandUrl = this.formatCommandUrl({ service, target, command: command.type });
-    let result = await this.fetch(commandUrl, {
+    let id = await this.getSystemIdentity();
+
+    return (await this.fetch(commandUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        authorization: Identity.system.toAuthHeader(),
+        authorization: id,
         position: command.$position && new Buffer(JSON.stringify(command.$position)).toString('base64')
       },
       body: JSON.stringify(command)
-    });
-    return result.json();
+    })).json();
   }
 }
