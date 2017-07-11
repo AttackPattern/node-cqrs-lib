@@ -11,13 +11,12 @@ export default class Repository {
   get = async(aggregateId) => {
     let events = await (await this.getStore()).getEvents(aggregateId);
     if (!events.length) {
-      console.log(`Aggregate ${aggregateId} not found`);
       return null;
     }
     return new this.Ctor(aggregateId, events);
   }
 
-  create = () => new this.Ctor(uuidV4());
+  create = id => new this.Ctor(id || uuidV4());
 
   record = async events => {
     let store = await this.getStore();

@@ -4,6 +4,7 @@ exports.Event = require('./lib/event');
 exports.Identity = require('./lib/identity');
 exports.BasicHandler = require('./lib/basicCommandHandler');
 exports.CommandHandler = require('./lib/commandHandler');
+exports.CreateAggregateCommandHandler = require('./lib/createAggregateCommandHandler');
 exports.AggregateCommandHandler = require('./lib/aggregateCommandHandler');
 exports.Repository = require('./lib/repository');
 exports.ValidationError = require('./lib/validationError');
