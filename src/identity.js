@@ -3,6 +3,7 @@ export default class Identity {
     this.username = data.username;
     this.userId = data.userId;
     this.claims = data.claims;
+    this.roles = data.claims && data.claims.roles || [];
   }
 
   static anonymous = new Identity({
