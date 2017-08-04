@@ -10,3 +10,5 @@ exports.Repository = require('./lib/repository');
 exports.ValidationError = require('./lib/validationError');
 exports.AuthorizationError = require('./lib/authorizationError');
 exports.CommandScheduling = require('./lib/commandScheduling');
+exports.CommandFailure = exports.CommandScheduling.CommandFailure;
+exports.CommandHandlerError = exports.CommandScheduling.CommandHandlerError;

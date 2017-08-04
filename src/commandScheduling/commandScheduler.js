@@ -15,8 +15,7 @@ export default class CommandScheduler {
       target: target,
       command: { ...command, $identity: Identity.system },
       due: due,
-      clock: clock || this.clock,
-      deliverer: this.deliverer
+      clock: clock || this.clock
     });
     this.store.push(cmd);
   }
@@ -33,6 +32,11 @@ export default class CommandScheduler {
   }
 
   deliver = async(cmd) => {
-    this.deliverer.deliver({ service: cmd.service, target: cmd.target, command: cmd.command });
+    try {
+      this.deliverer.deliver({ service: cmd.service, target: cmd.target, command: cmd.command });
+    }
+    catch (err) {
+      err.handler.handleDeliveryError(err.aggregate, cmd.command);
+    }
   }
 }

@@ -25,11 +25,13 @@ export default class AggregateCommandHandler {
 
   }
 
-  authorize = async (command, aggregate) => {
+  authorize = async(command, aggregate) => {
     return true;
   }
 
-  validate(command, aggregate) { }
+  validate(command, aggregate) {}
+
+  handleDeliveryError = async(command, aggregate) => {}
 }
 
 function asArray(events = []) {
