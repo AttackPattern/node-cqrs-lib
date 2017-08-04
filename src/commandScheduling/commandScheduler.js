@@ -1,3 +1,4 @@
+import Identity from '../identity';
 import ScheduledCommand from './scheduledCommand';
 
 export default class CommandScheduler {
@@ -9,14 +10,15 @@ export default class CommandScheduler {
   }
 
   schedule = async({ service, target, command, clock, due }) => {
-    this.store.push(new ScheduledCommand({
+    let cmd = new ScheduledCommand({
       service: service,
       target: target,
-      command: command,
+      command: { ...command, $identity: Identity.system },
       due: due,
       clock: clock || this.clock,
       deliverer: this.deliverer
-    }));
+    });
+    this.store.push(cmd);
   }
 
   commandsDue = async now => {

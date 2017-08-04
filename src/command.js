@@ -4,7 +4,7 @@ export default class Command {
 
   constructor(data = {}) {
     this.$position = data.$position;
-    this.$identity = data.$identity || Identity.anonymous;
+    this.$identity = new Identity(data.$identity) || Identity.anonymous;
   }
 
   validate = async function () {

@@ -1,3 +1,4 @@
+import uuidV4 from 'uuid/V4';
 import chai, { expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 chai.use(chaiAsPromised);
@@ -13,7 +14,7 @@ describe('Command Scheduler', () => {
     let scheduler = new CommandScheduler({ store });
     let command = new TestCommand();
     scheduler.schedule({ command: command });
-    expect((await store.commands()).map(c => c.command)).to.contain(command);
+    expect((await store.commands()).map(c => c.command.id)).to.contain(command.id);
   });
 
   describe('commandsDue', async() => {
@@ -32,7 +33,7 @@ describe('Command Scheduler', () => {
       let command = new TestCommand();
       scheduler.schedule({ command: command, due: new Date('5/1/2017'), clock: new VirtualClock('5/2/2017') });
 
-      expect((await scheduler.commandsDue()).map(c => c.command)).to.contain(command);
+      expect((await scheduler.commandsDue()).map(c => c.command.id)).to.contain(command.id);
     });
   });
 
@@ -69,10 +70,23 @@ describe('Command Scheduler', () => {
       await scheduler.deliverDueCommands();
       expect((await store.commands()).map(c => c.command)).to.not.contain(command);
     });
+
+    it('should set command identity to system', async() => {
+      let store = new TestStore();
+      let scheduler = new CommandScheduler({ store });
+      let command = new TestCommand();
+      scheduler.schedule({ command: command });
+      expect((await store.commands())[0].command.$identity.isSystem()).to.be.true;
+    });
   });
 });
 
-class TestCommand extends Command {}
+class TestCommand extends Command {
+  constructor(data = {}) {
+    super(data);
+    this.id = data.id || uuidV4();
+  }
+}
 
 class TestStore {
   storedCommands = []
