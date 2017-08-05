@@ -1,6 +1,10 @@
 export default class CommandFailure {
-  previousRetryAttempts = 0;
-  retry({ due = null }) {
+  constructor({ command, timesAttempted }) {
+    this.command = command;
+    this.timesAttempted = timesAttempted;
+  }
+
+  retry(due = null) {
     this.nextRetry = due || new Date();
   }
   cancel() {

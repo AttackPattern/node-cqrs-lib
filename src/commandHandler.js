@@ -25,7 +25,7 @@ export default class CommandHandler {
     return true;
   }
 
-  handleDeliveryError = async(command) => {}
+  handleDeliveryError = async(failure) => {}
 }
 
 function asArray(events = []) {

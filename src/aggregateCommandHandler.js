@@ -31,7 +31,10 @@ export default class AggregateCommandHandler {
 
   validate(command, aggregate) {}
 
-  handleDeliveryError = async(command, aggregate) => {}
+  handleDeliveryError = async(failure, aggregate) => {
+    console.log('delivery failure');
+    failure.cancel();
+  }
 }
 
 function asArray(events = []) {

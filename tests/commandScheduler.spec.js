@@ -1,7 +1,7 @@
 import uuidV4 from 'uuid/V4';
 import chai, { expect } from 'chai';
-import chaiAsPromised from 'chai-as-promised';
-chai.use(chaiAsPromised);
+chai.use(require('chai-as-promised'));
+chai.use(require('chai-datetime'));
 
 import VirtualClock from '../testSupport/virtualClock.js';
 import Command from '../src/command';
@@ -98,7 +98,8 @@ describe('Command Scheduler', () => {
   });
   describe('failure handling', async() => {
     it('should call delivery fail handler if handler throws an error', async() => {
-      let handler = new TestHandler();
+      let failureHandled = false;
+      let handler = new TestHandler({ onDeliveryError: () => failureHandled = true });
       let scheduler = new CommandScheduler({
         store: new TestStore(),
         clock: new VirtualClock('5/2/2017'),
@@ -112,7 +113,45 @@ describe('Command Scheduler', () => {
       scheduler.schedule({ command: new TestCommand(), due: new Date('5/1/2017') });
       await scheduler.deliverDueCommands();
 
-      expect(handler.failureHandled).to.be.true;
+      expect(failureHandled).to.be.true;
+    });
+
+    it('should complete command if delivery handler cancels', async() => {
+      let handler = new TestHandler({ onDeliveryError: failure => failure.cancel() });
+      let store = new TestStore();
+      let scheduler = new CommandScheduler({
+        store: store,
+        clock: new VirtualClock('5/2/2017'),
+        deliverer: {
+          deliver: ({ command }) => {
+            throw new CommandHandlerError({ handler, command });
+          }
+        }
+      });
+
+      scheduler.schedule({ command: new TestCommand(), due: new Date('5/1/2017') });
+      await scheduler.deliverDueCommands();
+
+      expect(store.allCommands[0].complete).to.be.true;
+    });
+
+    it('should retry command if delivery handler retries', async() => {
+      let handler = new TestHandler({ onDeliveryError: failure => failure.retry(new Date('5/3/2017')) });
+      let store = new TestStore();
+      let scheduler = new CommandScheduler({
+        store: store,
+        clock: new VirtualClock('5/2/2017'),
+        deliverer: {
+          deliver: ({ command }) => {
+            throw new CommandHandlerError({ handler, command });
+          }
+        }
+      });
+
+      scheduler.schedule({ command: new TestCommand(), due: new Date('5/1/2017') });
+      await scheduler.deliverDueCommands();
+
+      expect(store.allCommands[0].due).to.equalDate(new Date('5/3/2017'));
     });
   });
 });
@@ -125,17 +164,18 @@ class TestCommand extends Command {
 }
 
 class TestStore {
-  storedCommands = []
+  allCommands = []
 
-  commands = async() => this.storedCommands
+  commands = async() => this.allCommands.filter(cmd => !cmd.complete && !cmd.cancelled)
 
-  push = async cmd => this.storedCommands.push(cmd);
+  push = async cmd => this.allCommands.push(cmd)
 
-  complete = async(commands) => this.storedCommands = (await this.commands()).filter(cmd => !commands.some(due => due === cmd));
+  retry = (command, due) => command.due = due
+  complete = async command => command.complete = true
 }
 
 class TestHandler {
-  handleDeliveryError = async(command, aggregate) => {
-    this.failureHandled = true;
+  constructor({ onDeliveryError }) {
+    this.handleDeliveryError = onDeliveryError;
   }
 }

@@ -1,5 +1,6 @@
 import Identity from '../identity';
 import ScheduledCommand from './scheduledCommand';
+import CommandFailure from './commandFailure';
 
 export default class CommandScheduler {
 
@@ -17,7 +18,7 @@ export default class CommandScheduler {
       due: due,
       clock: clock || this.clock
     });
-    this.store.push(cmd);
+    await this.store.push(cmd);
   }
 
   commandsDue = async now => {
@@ -28,15 +29,26 @@ export default class CommandScheduler {
   deliverDueCommands = async(now) => {
     let dueCommands = await this.commandsDue(now);
     await Promise.all(dueCommands.map(async cmd => await this.deliver(cmd)));
-    await this.store.complete(dueCommands);
   }
 
   deliver = async(cmd) => {
     try {
-      this.deliverer.deliver({ service: cmd.service, target: cmd.target, command: cmd.command });
+      await this.deliverer.deliver({ service: cmd.service, target: cmd.target, command: cmd.command });
+      await this.store.complete(cmd);
     }
     catch (err) {
-      err.handler.handleDeliveryError(err.aggregate, cmd.command);
+      let failure = new CommandFailure({ command: cmd.command, timesAttempted: cmd.timesAttempted });
+      console.log('deliver catch', err);
+
+      await err.handler.handleDeliveryError(failure, err.aggregate);
+      if (failure.nextRetry) {
+        console.log('retry retried', failure.nextRetry);
+        await this.store.retry(cmd, failure.nextRetry);
+      }
+      else if (failure.cancelled) {
+        console.log('retry cancelled');
+        await this.store.complete(cmd);
+      }
     }
   }
 }
