@@ -136,7 +136,7 @@ describe('Command Scheduler', () => {
     });
 
     it('should retry command if delivery handler retries', async() => {
-      let handler = new TestHandler({ onDeliveryError: failure => failure.retry(new Date('5/3/2017')) });
+      let handler = new TestHandler({ onDeliveryError: failure => failure.retry({ due: new Date('5/3/2017') }) });
       let store = new TestStore();
       let scheduler = new CommandScheduler({
         store: store,

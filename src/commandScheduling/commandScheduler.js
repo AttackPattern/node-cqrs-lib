@@ -16,7 +16,8 @@ export default class CommandScheduler {
       target: target,
       command: { ...command, $identity: Identity.system },
       due: due,
-      clock: clock || this.clock
+      clock: clock || this.clock,
+      attempts: 0
     });
     await this.store.push(cmd);
   }
@@ -37,12 +38,11 @@ export default class CommandScheduler {
       await this.store.complete(cmd);
     }
     catch (err) {
-      let failure = new CommandFailure({ command: cmd.command, timesAttempted: cmd.timesAttempted });
-      console.log('deliver catch', err);
-
+      let failure = new CommandFailure({ command: cmd.command, attempts: cmd.attempts });
       await err.handler.handleDeliveryError(failure, err.aggregate);
+
       if (failure.nextRetry) {
-        console.log('retry retried', failure.nextRetry);
+        cmd.attempts++;
         await this.store.retry(cmd, failure.nextRetry);
       }
       else if (failure.cancelled) {
