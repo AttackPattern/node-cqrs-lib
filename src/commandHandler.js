@@ -19,13 +19,13 @@ export default class CommandHandler {
     return events;
   }
 
-  execute = async(command) => {
-
-  }
+  execute = async(command) => {}
 
   authorize = async(command) => {
     return true;
   }
+
+  handleDeliveryError = async(failure) => {}
 }
 
 function asArray(events = []) {

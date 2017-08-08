@@ -3,5 +3,7 @@ export default {
   RestCommandDeliverer: require('./restCommandDeliverer'),
   CommandScheduler: require('./commandScheduler'),
   RealWorldClock: require('./realWorldClock'),
-  ScheduledCommand: require('./scheduledCommand')
+  ScheduledCommand: require('./scheduledCommand'),
+  CommandHandlerError: require('./commandHandlerError'),
+  CommandFailure: require('./commandFailure')
 };
