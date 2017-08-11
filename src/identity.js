@@ -9,12 +9,10 @@ export default class Identity {
   static anonymous = new Identity({
     userId: 'anonymous'
   })
+  isAnonymous = () => this.userId === Identity.anonymous.userId
 
   static system = new Identity({
     userId: 'system'
   })
-
-  isSystem() {
-    return this.userId === Identity.system.userId;
-  }
+  isSystem = () => this.userId === Identity.system.userId
 }
