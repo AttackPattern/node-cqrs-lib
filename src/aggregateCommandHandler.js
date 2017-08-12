@@ -32,7 +32,7 @@ export default class AggregateCommandHandler {
   validate(command, aggregate) {}
 
   handleDeliveryError = async(failure) => {
-    console.log('delivery failure');
+    console.log('delivery failure', failure);
     failure.cancel();
   }
 }
