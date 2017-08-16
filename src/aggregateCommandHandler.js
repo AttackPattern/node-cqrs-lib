@@ -9,7 +9,7 @@ export default class AggregateCommandHandler {
 
     await command.validate();
     await this.authorize(command, aggregate);
-    this.validate(command, aggregate);
+    await this.validate(command, aggregate);
 
     let events = asArray(await this.execute(command, aggregate));
 
