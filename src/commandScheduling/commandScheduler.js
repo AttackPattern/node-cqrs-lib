@@ -37,9 +37,9 @@ export default class CommandScheduler {
       await this.deliverer.deliver({ service: cmd.service, target: cmd.target, command: cmd.command });
       await this.store.complete(cmd);
     }
-    catch (err) {
-      let failure = new CommandFailure({ command: cmd.command, attempts: cmd.attempts });
-      await err.handler.handleDeliveryError(failure, err.aggregate);
+    catch (error) {
+      let failure = new CommandFailure({ error, command: cmd.command, attempts: cmd.attempts });
+      await error.handler.handleDeliveryError(failure, error.aggregate);
 
       if (failure.nextRetry) {
         cmd.attempts++;
