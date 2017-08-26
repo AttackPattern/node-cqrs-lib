@@ -85,6 +85,22 @@ describe('Command Scheduler', () => {
       await scheduler.deliverDueCommands();
       expect((await store.commands()).map(c => c.command)).to.not.contain(command);
     });
+
+    it('should reschedule a retried command', async() => {
+      let store = new TestStore();
+      let scheduler = new CommandScheduler({
+        store,
+        clock: new VirtualClock('5/2/2017'),
+        deliverer: {
+          deliver: ({ command }) => command.retry({ due: new Date('5/3/2017') })
+        }
+      });
+
+      scheduler.schedule({ command: new TestCommand(), due: new Date('5/1/2017') });
+
+      await scheduler.deliverDueCommands();
+      expect(store.allCommands[0].due).to.equalDate(new Date('5/3/2017'));
+    });
   });
 
   describe('identity', async() => {
@@ -135,7 +151,7 @@ describe('Command Scheduler', () => {
       expect(store.allCommands[0].complete).to.be.true;
     });
 
-    it('should retry command if delivery handler retries', async() => {
+    it('should retry command if delivery failure handler retries', async() => {
       let handler = new TestHandler({ onDeliveryError: failure => failure.retry({ due: new Date('5/3/2017') }) });
       let store = new TestStore();
       let scheduler = new CommandScheduler({

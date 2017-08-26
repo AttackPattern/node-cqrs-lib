@@ -10,4 +10,12 @@ export default class Command {
   validate = async function () {
     return true;
   }
+
+  retry({ due, seconds }) {
+    if (!due) {
+      due = new Date();
+      due.setSeconds(due.getSeconds() + seconds);
+    }
+    this.nextRetry = due;
+  }
 }

@@ -11,10 +11,11 @@ export default class CommandScheduler {
   }
 
   schedule = async({ service, target, command, clock, due }) => {
+    command.$identity = Identity.system;
     let cmd = new ScheduledCommand({
       service: service,
       target: target,
-      command: { ...command, $identity: Identity.system },
+      command: command,
       due: due,
       clock: clock || this.clock,
       attempts: 0
@@ -35,14 +36,18 @@ export default class CommandScheduler {
   deliver = async(cmd) => {
     try {
       await this.deliverer.deliver({ service: cmd.service, target: cmd.target, command: cmd.command });
-      await this.store.complete(cmd);
+      if (cmd.command.nextRetry) {
+        await this.store.retry(cmd, cmd.command.nextRetry);
+      }
+      else {
+        await this.store.complete(cmd);
+      }
     }
     catch (error) {
       let failure = new CommandFailure({ error, command: cmd.command, attempts: cmd.attempts });
       await error.handler.handleDeliveryError(failure, error.aggregate);
 
       if (failure.nextRetry) {
-        cmd.attempts++;
         await this.store.retry(cmd, failure.nextRetry);
       }
       else if (failure.cancelled) {
