@@ -2,14 +2,14 @@ import uuidV4 from 'uuid/v4';
 
 export default class Repository {
 
-  constructor(getStore, Ctor) {
-    this.getStore = getStore;
-    this.Ctor = Ctor;
+  constructor({ eventStore, aggregate }) {
+    this.eventStore = eventStore;
+    this.Ctor = aggregate;
     this.subscriptions = [];
   }
 
   get = async(aggregateId) => {
-    let events = await (await this.getStore()).getEvents(aggregateId);
+    let events = await this.eventStore.getEvents(aggregateId);
     if (!events.length) {
       return null;
     }
@@ -19,8 +19,7 @@ export default class Repository {
   create = id => new this.Ctor(id || uuidV4());
 
   record = async events => {
-    let store = await this.getStore();
-    let recordedEvents = await store.record(events);
+    let recordedEvents = await this.eventStore.record(events);
     await this.notifySubscribers(recordedEvents);
   }
 
@@ -39,7 +38,7 @@ export default class Repository {
     this.subscriptions.push(subscription);
   }
 
-  getEvents = async (aggregateId) => {
-    return await (await this.getStore()).getEvents(aggregateId);
+  getEvents = async(aggregateId) => {
+    return await this.eventStore.getEvents(aggregateId);
   }
 }
