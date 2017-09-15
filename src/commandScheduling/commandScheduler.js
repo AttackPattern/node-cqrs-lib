@@ -45,6 +45,10 @@ export default class CommandScheduler {
     }
     catch (error) {
       let failure = new CommandFailure({ error, command: cmd.command, attempts: cmd.attempts });
+      if (!error.handler) {
+        console.log('Unhandled error', error);
+        throw error;
+      }
       await error.handler.handleDeliveryError(failure, error.aggregate);
 
       if (failure.nextRetry) {
