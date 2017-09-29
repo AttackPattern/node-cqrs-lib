@@ -1,9 +1,9 @@
 export default class CommandFailure {
-  constructor({ error, command, aggregate, attempts }) {
+  constructor({ error, command, aggregate, $scheduler }) {
     this.error = error;
     this.command = command;
     this.aggregate = aggregate;
-    this.attempts = attempts;
+    this.$scheduler = $scheduler || {};
   }
 
   retry({ due = null, seconds = null }) {
@@ -11,7 +11,7 @@ export default class CommandFailure {
       due = new Date();
       due.setSeconds(due.getSeconds() + seconds);
     }
-    this.nextRetry = due;
+    this.$scheduler.due = due;
   }
   cancel() {
     this.cancelled = true;

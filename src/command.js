@@ -5,6 +5,7 @@ export default class Command {
   constructor(data = {}) {
     this.$position = data.$position;
     this.$identity = new Identity(data.$identity) || Identity.anonymous;
+    this.$scheduler = data.$scheduler || {};
   }
 
   validate = async function () {
@@ -16,6 +17,6 @@ export default class Command {
       due = new Date();
       due.setSeconds(due.getSeconds() + seconds);
     }
-    this.nextRetry = due;
+    this.$scheduler.due = due;
   }
 }

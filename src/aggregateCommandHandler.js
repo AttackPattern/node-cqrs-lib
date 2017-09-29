@@ -12,7 +12,7 @@ export default class AggregateCommandHandler {
     await this.validate(command, aggregate);
 
     let events = asArray(await this.execute(command, aggregate));
-    commandData.nextRetry = command.nextRetry;
+    commandData.$scheduler = command.$scheduler;
 
     events.forEach(event => {
       event.actor = command.$identity && command.$identity.userId;

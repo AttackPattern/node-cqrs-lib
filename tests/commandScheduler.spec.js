@@ -99,7 +99,7 @@ describe('Command Scheduler', () => {
       scheduler.schedule({ command: new TestCommand(), due: new Date('5/1/2017') });
 
       await scheduler.deliverDueCommands();
-      expect(store.allCommands[0].due).to.equalDate(new Date('5/3/2017'));
+      expect(store.allCommands[0].command.$scheduler.due).to.equalDate(new Date('5/3/2017'));
     });
   });
 
@@ -166,8 +166,8 @@ describe('Command Scheduler', () => {
 
       scheduler.schedule({ command: new TestCommand(), due: new Date('5/1/2017') });
       await scheduler.deliverDueCommands();
-
-      expect(store.allCommands[0].due).to.equalDate(new Date('5/3/2017'));
+console.log(store.allCommands[0].command.$scheduler);
+      expect(store.allCommands[0].command.$scheduler.due).to.equalDate(new Date('5/3/2017'));
     });
   });
 });
@@ -186,7 +186,7 @@ class TestStore {
 
   push = async cmd => this.allCommands.push(cmd)
 
-  retry = (command, due) => command.due = due
+  retry = (cmd) => {  }
   complete = async command => command.complete = true
 }
 

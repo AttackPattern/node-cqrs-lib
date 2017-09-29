@@ -35,24 +35,27 @@ export default class CommandScheduler {
 
   deliver = async(cmd) => {
     try {
+      cmd.command.$scheduler.due = null;
       await this.deliverer.deliver({ service: cmd.service, target: cmd.target, command: cmd.command });
-      if (cmd.command.nextRetry) {
-        await this.store.retry(cmd, cmd.command.nextRetry);
+      cmd.command.$scheduler.attempts = cmd.attempts++;
+
+      if (cmd.command.$scheduler.due) {
+        await this.store.retry(cmd);
       }
       else {
         await this.store.complete(cmd);
       }
     }
     catch (error) {
-      let failure = new CommandFailure({ error, command: cmd.command, attempts: cmd.attempts });
+      let failure = new CommandFailure({ error, command: cmd.command, $scheduler: { attempts: cmd.attempts } });
       if (!error.handler) {
         console.log('Unhandled error', error);
         throw error;
       }
       await error.handler.handleDeliveryError(failure, error.aggregate);
-
-      if (failure.nextRetry) {
-        await this.store.retry(cmd, failure.nextRetry);
+      if (failure.$scheduler.due) {
+        cmd.command.$scheduler.due = failure.$scheduler.due;
+        await this.store.retry(cmd);
       }
       else if (failure.cancelled) {
         console.log('retry cancelled');
