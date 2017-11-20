@@ -1,5 +1,5 @@
 import Identity from '../identity';
-import ScheduledCommand from './scheduledCommand';
+import Schedule from './schedule';
 import CommandFailure from './commandFailure';
 
 export default class CommandScheduler {
@@ -10,56 +10,54 @@ export default class CommandScheduler {
     this.deliverer = deliverer;
   }
 
-  schedule = async({ service, target, command, clock, due }) => {
+  schedule = async ({ service, target, clock, due, command }) => {
     command.$identity = Identity.system;
-    let cmd = new ScheduledCommand({
+    command.$scheduler = new Schedule({
       service: service,
       target: target,
-      command: command,
       due: due,
       clock: clock || this.clock,
       attempts: 0
     });
-    await this.store.push(cmd);
+    await this.store.push(command);
   }
 
   commandsDue = async now => {
     let commands = await this.store.commands();
-    return commands.filter(cmd => cmd.isDue(now));
+    return commands.filter(cmd => cmd.$scheduler.isDue(now));
   }
 
-  deliverDueCommands = async(now) => {
+  deliverDueCommands = async (now) => {
     let dueCommands = await this.commandsDue(now);
     await Promise.all(dueCommands.map(async cmd => await this.deliver(cmd)));
   }
 
-  deliver = async(cmd) => {
+  deliver = async (command) => {
     try {
-      cmd.command.$scheduler.due = null;
-      await this.deliverer.deliver({ service: cmd.service, target: cmd.target, command: cmd.command });
-      cmd.command.$scheduler.attempts = cmd.attempts++;
+      command.$scheduler.due = null;
+      await this.deliverer.deliver({ service: command.$scheduler.service, target: command.$scheduler.target, command });
+      command.$scheduler.attempts = command.$scheduler.attempts + 1;
 
-      if (cmd.command.$scheduler.due) {
-        await this.store.retry(cmd);
+      if (command.$scheduler.due) {
+        await this.store.retry(command);
       }
       else {
-        await this.store.complete(cmd);
+        await this.store.complete(command);
       }
     }
     catch (error) {
-      let failure = new CommandFailure({ error, command: cmd.command, $scheduler: { attempts: cmd.attempts } });
+      let failure = new CommandFailure({ error, command });
       if (!error.handler) {
         console.log('Unhandled error', error);
         throw error;
       }
       await error.handler.handleDeliveryError(failure, error.aggregate);
-      if (failure.$scheduler.due) {
-        cmd.command.$scheduler.due = failure.$scheduler.due;
-        await this.store.retry(cmd);
+      if (command.$scheduler.due) {
+        await this.store.retry(command);
       }
       else if (failure.cancelled) {
         console.log('retry cancelled');
-        await this.store.complete(cmd);
+        await this.store.complete(command);
       }
     }
   }

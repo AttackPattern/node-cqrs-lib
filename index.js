@@ -12,3 +12,4 @@ exports.AuthorizationError = require('./lib/authorizationError');
 exports.CommandScheduling = require('./lib/commandScheduling');
 exports.CommandFailure = exports.CommandScheduling.CommandFailure;
 exports.CommandHandlerError = exports.CommandScheduling.CommandHandlerError;
+exports.Schedule = exports.CommandScheduling.Schedule;
