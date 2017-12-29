@@ -1,7 +1,7 @@
 {
   "name": "node-cqrs-lib",
   "version": "0.5",
-  "description": "Library of base classes for Node.js and Kafka implementations with CQRS",
+  "description": "Library of base classes for Node CQRS",
   "main": "index.js",
   "scripts": {
     "build": "NODE_ENV=production gulp"
