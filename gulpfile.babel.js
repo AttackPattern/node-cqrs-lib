@@ -98,12 +98,11 @@ gulp.task(`${LINT}${GULPFILE}`, lintJS.bind(null, BUILD_CONFIG.SRC_GULPFILE, GUL
 gulp.task(`${LINT}${SCRIPTS}`, lintJS.bind(null, BUILD_CONFIG.SRC_SCRIPTS, SCRIPTS));
 
 // test-specific tasks
-gulp.task(`${INSTRUMENT}${SCRIPTS}`, gulp.series(`${LINT}${SCRIPTS}`, instrumentScripts));
-gulp.task(`${TEST}${SCRIPTS}`, gulp.series(`${INSTRUMENT}${SCRIPTS}`, testScripts));
+gulp.task(`${INSTRUMENT}${SCRIPTS}`, instrumentScripts);
 gulp.task(`${TEST}${SCRIPTS}`, testScripts);
 
 // build-specific tasks
-gulp.task(`${BUILD}${SCRIPTS}`, gulp.series(`${TEST}${SCRIPTS}`, buildScripts));
+gulp.task(`${BUILD}${SCRIPTS}`, buildScripts);
 
 // main task runners
 gulp.task(`${RUN}${CLEAN}${ALL}`, runCleanAll);
@@ -115,7 +114,6 @@ gulp.task(`${RUN}${SCRIPTS}`, gulp.series(
     `${TEST}${SCRIPTS}`,
     `${BUILD}${SCRIPTS}`
 ));
-
 
 // main task runners
 gulp.task('default', gulp.series(
