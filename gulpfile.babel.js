@@ -6,7 +6,6 @@ import gulp from 'gulp';
 import loadPlugins from 'gulp-load-plugins';
 
 import del from 'del';
-import { Instrumenter } from 'isparta';
 
 /*******************************************************************************
  * Contants
@@ -45,9 +44,9 @@ function lintJS(src, cacheKey) {
  ******************************************************************************/
 function instrumentScripts() {
     return gulp.src(BUILD_CONFIG.SRC_SCRIPTS)
+        .pipe($.babel())
         .pipe($.istanbul({
-            ...BUILD_CONFIG.ISTANBUL.INIT,
-            instrumenter: Instrumenter
+            ...BUILD_CONFIG.ISTANBUL.INIT
         }))
         .pipe($.istanbul.hookRequire());
 }
@@ -113,7 +112,7 @@ gulp.task(`${RUN}${CLEAN}${SCRIPTS}`, runCleanScripts);
 gulp.task(`${RUN}${SCRIPTS}`, gulp.series(
     `${RUN}${CLEAN}${SCRIPTS}`,
     `${LINT}${SCRIPTS}`,
-    // `${INSTRUMENT}${SCRIPTS}`,
+    `${INSTRUMENT}${SCRIPTS}`,
     // `${TEST}${SCRIPTS}`,
     `${BUILD}${SCRIPTS}`
 ));
