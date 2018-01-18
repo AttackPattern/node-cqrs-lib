@@ -55,7 +55,7 @@ function testScripts() {
     return gulp.src(BUILD_CONFIG.TST_UNIT)
         .pipe($.babel())
         .pipe($.mocha(BUILD_CONFIG.MOCHA))
-        .pipe($.istanbul.writeReports(BUILD_CONFIG.ISTANBUL.WRITE))
+        // .pipe($.istanbul.writeReports(BUILD_CONFIG.ISTANBUL.WRITE))
         .on('error', () => $.util.log('unit tests failed...'));
 }
 
@@ -103,8 +103,7 @@ gulp.task(`${TEST}${SCRIPTS}`, gulp.series(`${INSTRUMENT}${SCRIPTS}`, testScript
 gulp.task(`${TEST}${SCRIPTS}`, testScripts);
 
 // build-specific tasks
-// gulp.task(`${BUILD}${SCRIPTS}`, gulp.series(`${TEST}${SCRIPTS}`, buildScripts));
-gulp.task(`${BUILD}${SCRIPTS}`, buildScripts);
+gulp.task(`${BUILD}${SCRIPTS}`, gulp.series(`${TEST}${SCRIPTS}`, buildScripts));
 
 // main task runners
 gulp.task(`${RUN}${CLEAN}${ALL}`, runCleanAll);
@@ -113,7 +112,7 @@ gulp.task(`${RUN}${SCRIPTS}`, gulp.series(
     `${RUN}${CLEAN}${SCRIPTS}`,
     `${LINT}${SCRIPTS}`,
     `${INSTRUMENT}${SCRIPTS}`,
-    // `${TEST}${SCRIPTS}`,
+    `${TEST}${SCRIPTS}`,
     `${BUILD}${SCRIPTS}`
 ));
 

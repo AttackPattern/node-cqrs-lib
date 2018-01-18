@@ -9,19 +9,19 @@ import CommandHandler from '../src/aggregateCommandHandler.js';
 import ValidationError from '../src/validationError.js';
 
 describe('Command Handler', () => {
-  it('should throw on a failed command validation', async() => {
+  it('should throw on a failed command validation', async () => {
     let handler = new CommandHandler(TestCommand_FailValidation);
 
     await expect(handler.handle({}, new TestAggregate())).to.be.rejectedWith('Failed Validation');
   });
 
-  it('should throw on a failed aggregate validation', async() => {
+  it('should throw on a failed aggregate validation', async () => {
     let handler = new CommandHandler_FailsValidation(TestCommand);
 
     await expect(handler.handle({}, new TestAggregate())).to.be.rejectedWith('Failed Aggregate Validation');
   });
 
-  it('should apply events to aggregate', async() => {
+  it('should apply events to aggregate', async () => {
     let handler = new CommandHandler(TestCommand);
 
     let aggregate = new TestAggregate();
@@ -35,11 +35,11 @@ describe('Command Handler', () => {
 });
 
 class TestCommandHandler extends CommandHandler {
-  execute = async(command, aggregate) => [new TestEvent({ message: command.message })];
+  execute = async (command, aggregate) => [new TestEvent({ message: command.message })];
 }
 
 class TestCommand_FailValidation extends Command {
-  validate = async() => {
+  validate = async () => {
     throw new ValidationError({ command: this, message: 'Failed Validation' });
   }
 }
@@ -50,7 +50,7 @@ class TestCommand extends Command {
     this.message = data.message;
   }
 
-  validate = async() => true
+  validate = async () => true
 }
 
 class TestEvent extends Event {
