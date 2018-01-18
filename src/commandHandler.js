@@ -4,7 +4,7 @@ export default class CommandHandler {
     this.Command = Command;
   }
 
-  handle = async(commandData) => {
+  handle = async (commandData) => {
     const command = new this.Command(commandData);
 
     await command.validate();
@@ -19,13 +19,13 @@ export default class CommandHandler {
     return events;
   }
 
-  execute = async(command) => {}
+  execute = async command => { }
 
-  authorize = async(command) => {
+  authorize = async command => {
     return true;
   }
 
-  handleDeliveryError = async(failure) => {}
+  handleDeliveryError = async failure => { }
 }
 
 function asArray(events = []) {

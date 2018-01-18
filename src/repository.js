@@ -8,7 +8,7 @@ export default class Repository {
     this.subscriptions = [];
   }
 
-  get = async(aggregateId) => {
+  get = async aggregateId => {
     let events = await this.eventStore.getEvents(aggregateId);
     if (!events.length) {
       return null;
@@ -23,7 +23,7 @@ export default class Repository {
     await this.notifySubscribers(recordedEvents);
   }
 
-  notifySubscribers = async(events) => {
+  notifySubscribers = async events => {
     return await Promise.all(this.subscriptions.map(async s => {
       try {
         return await s(events);
@@ -38,7 +38,7 @@ export default class Repository {
     this.subscriptions.push(subscription);
   }
 
-  getEvents = async(aggregateId) => {
+  getEvents = async aggregateId => {
     return await this.eventStore.getEvents(aggregateId);
   }
 }

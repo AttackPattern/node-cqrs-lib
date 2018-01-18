@@ -1,12 +1,11 @@
 {
   "plugins": [
-    "add-module-exports",
-    "transform-async-to-generator",
-    "transform-class-properties",
-    "transform-object-rest-spread",
-    "transform-decorators-legacy"
+    "@babel/plugin-proposal-object-rest-spread",
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-proposal-decorators",
+    "@babel/plugin-proposal-optional-chaining"
   ],
   "presets": [
-    "es2015"
+    "@babel/preset-env"
   ]
 }

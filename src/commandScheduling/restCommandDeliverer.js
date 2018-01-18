@@ -1,5 +1,4 @@
 import url from 'url';
-import Identity from '../identity';
 
 export default class RestCommandDeliverer {
 
@@ -17,7 +16,7 @@ export default class RestCommandDeliverer {
     });
   }
 
-  deliver = async({ service, target, command }) => {
+  deliver = async ({ service, target, command }) => {
     let commandUrl = this.formatCommandUrl({ service, target, command: command.type });
     let id = await this.getSystemIdentity();
 

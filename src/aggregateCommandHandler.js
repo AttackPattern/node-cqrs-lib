@@ -4,7 +4,7 @@ export default class AggregateCommandHandler {
     this.Command = Command;
   }
 
-  handle = async(commandData, aggregate) => {
+  handle = async (commandData, aggregate) => {
     const command = new this.Command(commandData);
 
     await command.validate();
@@ -22,17 +22,17 @@ export default class AggregateCommandHandler {
     return aggregate.applyEvents(events);
   }
 
-  execute = async(command, aggregate) => {
+  execute = async (command, aggregate) => {
 
   }
 
-  authorize = async(command, aggregate) => {
+  authorize = async (command, aggregate) => {
     return true;
   }
 
-  validate(command, aggregate) {}
+  validate(command, aggregate) { }
 
-  handleDeliveryError = async(failure) => {
+  handleDeliveryError = async (failure) => {
     console.log('delivery failure', failure);
     failure.cancel();
   }

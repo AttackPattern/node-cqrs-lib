@@ -6,13 +6,6 @@
 
   "SRC_GULPFILE": "./gulpfile.babel.js",
   "SRC_SCRIPTS": "./src/**/*.js",
-  "BABEL": {
-    "plugins": [
-      "transform-es2015-destructuring",
-      "transform-runtime"
-    ],
-    "presets": ["es2017"]
-  },
 
   "TST_UNIT": "./tests/**/*.js",
   "MOCHA": {

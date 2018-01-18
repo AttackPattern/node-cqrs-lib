@@ -9,9 +9,9 @@ export default class BasicCommandHandler extends AggregateCommandHandler {
     this[EVENT] = Event;
   }
 
-  execute = async(command) => new this[EVENT]({
-      ...command
-    });
+  execute = async (command) => new this[EVENT]({
+    ...command
+  });
 }
 
 export function factory(Command, Event) {
