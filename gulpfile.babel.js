@@ -1,6 +1,6 @@
 import '@babel/polyfill';
 
-import BUILD_CONFIG from './config/buildConfig';
+import BUILD_CONFIG from './buildConfig';
 
 import gulp from 'gulp';
 import loadPlugins from 'gulp-load-plugins';
