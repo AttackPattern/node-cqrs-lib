@@ -6,7 +6,6 @@ chai.use(require('chai-datetime'));
 import VirtualClock from '../testSupport/virtualClock.js';
 import Command from '../src/command';
 import CommandScheduler from '../src/commandScheduling/commandScheduler';
-import Schedule from '../src/commandScheduling/schedule';
 import CommandHandlerError from '../src/commandScheduling/commandHandlerError';
 
 describe('Command Scheduler', () => {

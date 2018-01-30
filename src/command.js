@@ -1,4 +1,4 @@
-import Identity from './identity';
+import Identity from './auth/identity';
 
 export default class Command {
 

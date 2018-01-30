@@ -1,5 +1,4 @@
 import { expect } from 'chai';
-import sinon from 'sinon';
 import Aggregate from '../src/aggregate.js';
 import Event from '../src/event';
 
