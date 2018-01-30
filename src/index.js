@@ -15,3 +15,4 @@ export RealWorldClock from './commandScheduling/realWorldClock';
 export Schedule from './commandScheduling/schedule';
 export CommandHandlerError from './commandScheduling/commandHandlerError';
 export CommandFailure from './commandScheduling/commandFailure';
+export RoleMapping from './auth/roleMapping';

@@ -1,4 +1,3 @@
-
 export default class RoleMapping {
   constructor(mappings) {
     this.mappings = mappings;
