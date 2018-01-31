@@ -5,7 +5,7 @@ export default class Identity {
     this.claims = data.claims || {};
     this.roles = data.claims && data.claims.roles || [];
     this.version = data.version;
-    this.capabilities = data.capabilities;
+    this.rights = data.rights;
   }
 
   static anonymous = new Identity({

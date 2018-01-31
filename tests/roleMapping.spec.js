@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import RoleMapping from '../src/auth/roleMapping';
 
 describe('RoleMapping', () => {
-  it('should have capabilities of specified role', () => {
+  it('should have rights of specified role', () => {
     let mapping = new RoleMapping({
       friend: ['a', 'b']
     });
@@ -12,7 +12,7 @@ describe('RoleMapping', () => {
       .contain('c');
   });
 
-  it('should have unique capabilities of specified roles', () => {
+  it('should have unique rights of specified roles', () => {
     let mapping = new RoleMapping({
       friend: ['a'],
       bestFriend: ['b']

@@ -16,3 +16,4 @@ export Schedule from './commandScheduling/schedule';
 export CommandHandlerError from './commandScheduling/commandHandlerError';
 export CommandFailure from './commandScheduling/commandFailure';
 export RoleMapping from './auth/roleMapping';
+export authorize from './auth/authorizeDecorator';
