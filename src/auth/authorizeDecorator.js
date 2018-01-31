@@ -1,6 +1,6 @@
 import AuthorizationError from './authorizationError';
 
-export default function check({ rights, message = 'User is not allowed to issue this command' }) {
+export default function check({ rights = [], message = 'User is not allowed to issue this command' } = {}) {
   return (Target, property, descriptor) => {
     return () => {
       const t = new Target();
