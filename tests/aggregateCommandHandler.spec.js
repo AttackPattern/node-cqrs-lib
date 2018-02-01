@@ -67,8 +67,8 @@ class TestEvent extends Event {
 }
 
 class TestAggregate extends Aggregate {
-  constructor(id, events) {
-    super(id, events);
+  constructor({ id, events } = {}) {
+    super({ id, events });
   }
 }
 

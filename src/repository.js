@@ -13,10 +13,10 @@ export default class Repository {
     if (!events.length) {
       return null;
     }
-    return new this.Ctor(aggregateId, events);
+    return new this.Ctor({ id: aggregateId, events });
   }
 
-  create = id => new this.Ctor(id || uuidV4());
+  create = id => new this.Ctor({ id: id || uuidV4() });
 
   record = async events => {
     let recordedEvents = await this.eventStore.record(events);
