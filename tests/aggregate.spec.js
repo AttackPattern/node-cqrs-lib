@@ -47,4 +47,9 @@ describe('Aggregate', () => {
     expect(aggregate.version).to.equal(3);
     expect(event.sequenceNumber).to.equal(3);
   });
+
+  it('should use snapshot for aggregate initial state', () => {
+    let aggregate = new Aggregate({ id: 'abc', events: [new Event({ sequenceNumber: 2 })], snapshot: { property1: 'value1' } });
+    expect(aggregate.property1).to.equal('value1');
+  });
 });

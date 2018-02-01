@@ -1,8 +1,9 @@
 export default class Aggregate {
 
-  constructor({ id, events = [] } = {}) {
+  constructor({ id, events = [], snapshot = {} } = {}) {
     this.id = id;
     this.version = 0;
+    Object.assign(this, snapshot);
     this.applyEvents(events);
   }
 
