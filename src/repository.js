@@ -13,12 +13,18 @@ export default class Repository {
     if (!snapshot && !events.length) {
       return null;
     }
-    return new this.Ctor({
+    let aggregate = new this.Ctor({
       id: aggregateId,
       events,
-      snapshot: snapshot?.body,
-      version: snapshot?.version
+      snapshot: snapshot ?.body,
+      version: snapshot ?.version
     });
+
+    if ((aggregate.$snapshotSchedule ?.every || Number.MAX_VALUE) <= events.length) {
+      await this.eventStore.saveSnapshot(aggregate);
+    }
+
+    return aggregate;
   }
 
   create = id => new this.Ctor({ id: id || uuidV4() });

@@ -19,3 +19,4 @@ export RoleMapping from './auth/roleMapping';
 export authorize from './auth/authorizeDecorator';
 export anonymous from './auth/anonymousDecorator';
 export system from './auth/systemDecorator';
+export snapshot from './snapshotDecorator';
