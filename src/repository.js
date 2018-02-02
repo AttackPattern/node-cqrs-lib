@@ -10,10 +10,15 @@ export default class Repository {
 
   get = async aggregateId => {
     let { events, snapshot } = await this.eventStore.getEvents(aggregateId);
-    if (!events.length) {
+    if (!snapshot && !events.length) {
       return null;
     }
-    return new this.Ctor({ id: aggregateId, events, snapshot });
+    return new this.Ctor({
+      id: aggregateId,
+      events,
+      snapshot: snapshot?.body,
+      version: snapshot?.version
+    });
   }
 
   create = id => new this.Ctor({ id: id || uuidV4() });

@@ -48,8 +48,15 @@ describe('Aggregate', () => {
     expect(event.sequenceNumber).to.equal(3);
   });
 
-  it('should use snapshot for aggregate initial state', () => {
-    let aggregate = new Aggregate({ id: 'abc', events: [new Event({ sequenceNumber: 2 })], snapshot: { property1: 'value1' } });
+  it('should use snapshot data for aggregate initial state', () => {
+    let aggregate = new Aggregate({ id: 'abc', events: [new Event({ sequenceNumber: 6 })], snapshot: { property1: 'value1' } });
     expect(aggregate.property1).to.equal('value1');
+    expect(aggregate.version).to.equal(6);
+  });
+
+  it('should use snapshot version for aggregate initial state', () => {
+    let aggregate = new Aggregate({ id: 'abc', snapshot: { property1: 'value1' }, version: 5 });
+    expect(aggregate.property1).to.equal('value1');
+    expect(aggregate.version).to.equal(5);
   });
 });
