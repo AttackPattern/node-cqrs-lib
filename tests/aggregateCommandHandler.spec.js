@@ -5,7 +5,7 @@ chai.use(chaiAsPromised);
 import Aggregate from '../src/aggregate.js';
 import Command from '../src/command.js';
 import Event from '../src/event.js';
-import CommandHandler from '../src/aggregateCommandHandler.js';
+import CommandHandler from '../src/commandHandling/aggregateCommandHandler.js';
 import ValidationError from '../src/validationError.js';
 
 describe('Command Handler', () => {
