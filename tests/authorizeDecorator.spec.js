@@ -18,6 +18,11 @@ describe('Authorize Decorator', () => {
     await expect(testClass.authorize({ $identity: new Identity({ rights: ['rightB'] }) })).to.be.rejectedWith('Failed auth');
   });
 
+  it('preserves constructor arguments with authorize attribute', async () => {
+    const testClass = new TestClass('authTest');
+    expect(testClass.value).to.equal('authTest');
+  });
+
   it('allows anonymous call when user is anonymous', async () => {
     const testClass = new AnonTestClass();
     await expect(testClass.authorize({ $identity: Identity.anonymous })).to.be.fulfilled;
@@ -26,6 +31,11 @@ describe('Authorize Decorator', () => {
   it('throws on anonymous call when user is not anonymous', async () => {
     const testClass = new AnonTestClass();
     await expect(testClass.authorize({ $identity: new Identity() })).to.be.rejectedWith('Not anonymous');
+  });
+
+  it('preserves constructor arguments with anonymous attribute', async () => {
+    const testClass = new AnonTestClass('anonTest');
+    expect(testClass.value).to.equal('anonTest');
   });
 
   it('allows system call when user is system', async () => {
@@ -37,13 +47,30 @@ describe('Authorize Decorator', () => {
     const testClass = new SystemTestClass();
     await expect(testClass.authorize({ $identity: new Identity() })).to.be.rejectedWith('Not system');
   });
+
+  it('preserves constructor arguments with system attribute', async () => {
+    const testClass = new SystemTestClass('sysTest');
+    expect(testClass.value).to.equal('sysTest');
+  });
 });
 
 @authorize({ rights: ['rightA'], message: 'Failed auth' })
-class TestClass { }
+class TestClass {
+  constructor(value) {
+    this.value = value;
+  }
+}
 
 @anonymous({ message: 'Not anonymous' })
-class AnonTestClass { }
+class AnonTestClass {
+  constructor(value) {
+    this.value = value;
+  }
+}
 
 @system({ message: 'Not system' })
-class SystemTestClass { }
+class SystemTestClass {
+    constructor(value) {
+      this.value = value;
+    }
+}
