@@ -17,4 +17,6 @@ export default class Identity {
     userId: 'system'
   })
   isSystem = () => this.userId === Identity.system.userId
+
+  isUser = () => !(this.isAnonymous() || this.isSystem())
 }
