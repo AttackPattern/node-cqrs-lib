@@ -10,13 +10,22 @@ export default class CommandHandler {
     await command.validate();
     await this.authorize(command);
 
-    let events = asArray(await this.execute(command));
+    const result = asArray(await this.execute(command));
 
+    let { events, ...body } = result;
+
+    if (!events) {
+      events = result;
+      body = null;
+    }
+
+    events = asArray(events);
     events.forEach(event => {
       event.actor = command.$identity && command.$identity.userId;
       event.position = command.$position;
     });
-    return events;
+
+    return { events, ...body };
   }
 
   execute = async command => { }

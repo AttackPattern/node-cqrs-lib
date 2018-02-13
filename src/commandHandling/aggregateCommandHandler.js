@@ -11,15 +11,24 @@ export default class AggregateCommandHandler {
     await this.authorize(command, aggregate);
     await this.validate(command, aggregate);
 
-    let events = asArray(await this.execute(command, aggregate));
+    const result = await this.execute(command, aggregate);
     commandData.$scheduler = command.$scheduler;
 
+    let { events, ...body } = result;
+
+    if (!events) {
+      events = result;
+      body = null;
+    }
+
+    events = asArray(events);
     events.forEach(event => {
       event.actor = command.$identity && command.$identity.userId;
       event.position = command.$position;
     });
+    events = aggregate.applyEvents(events);
 
-    return aggregate.applyEvents(events);
+    return { events, ...body };
   }
 
   execute = async (command, aggregate) => {
