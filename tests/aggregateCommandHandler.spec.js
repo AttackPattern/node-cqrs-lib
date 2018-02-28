@@ -26,7 +26,6 @@ describe('Command Handler', () => {
 
     let aggregate = new TestAggregate();
 
-    handler = new TestCommandHandler(TestCommand);
     await handler.handle(new TestCommand({ message: 'Successful test' }), aggregate);
 
     expect(aggregate.lastMessage).to.equal('Successful test');
