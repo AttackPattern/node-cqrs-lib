@@ -22,7 +22,7 @@ describe('Command Handler', () => {
   });
 
   it('should apply events to aggregate', async () => {
-    let handler = new CommandHandler(TestCommand);
+    let handler = new TestCommandHandler(TestCommand);
 
     let aggregate = new TestAggregate();
 
