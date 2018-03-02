@@ -12,7 +12,7 @@ export default class CommandHandler {
 
     const result = asArray(await this.execute(command));
 
-    let { events, ...body } = result;
+    let { events, ...body } = result || {};
 
     if (!events) {
       events = result;

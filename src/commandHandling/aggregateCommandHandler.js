@@ -14,7 +14,7 @@ export default class AggregateCommandHandler {
     const result = await this.execute(command, aggregate);
     commandData.$scheduler = command.$scheduler;
 
-    let { events, ...body } = result;
+    let { events, ...body } = result || {};
 
     if (!events) {
       events = result;
