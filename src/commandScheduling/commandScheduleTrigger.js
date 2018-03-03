@@ -3,12 +3,21 @@ export default class CommandScheduleTrigger {
     this.commandScheduler = commandScheduler;
     this.clock = clock;
     this.interval = interval;
+
+    const scheduleMethod = this.commandScheduler.schedule.bind(this);
+
+    this.commandScheduler.schedule = async (...args) => {
+      await scheduleMethod(...args);
+      clearTimeout(this.nextTimeout);
+      this.nextTimeout = setTimeout(() => this.onTick(), 0);
+    };
   }
 
-  start = () => setTimeout(this.onTick, this.interval);
+  start = () => setTimeout(this.onTick, 0);
 
   onTick = async () => {
+    clearTimeout(this.nextTimeout);
     await this.commandScheduler.deliverDueCommands(this.clock.now());
-    setTimeout(this.onTick, this.interval);
+    this.nextTimeout = setTimeout(this.onTick, this.interval);
   }
 }
