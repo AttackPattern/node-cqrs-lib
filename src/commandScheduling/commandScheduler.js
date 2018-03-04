@@ -1,3 +1,5 @@
+import queue from 'async/queue';
+
 import Identity from '../auth/identity';
 import Schedule from './schedule';
 import CommandFailure from './commandFailure';
@@ -8,6 +10,19 @@ export default class CommandScheduler {
     this.store = store;
     this.clock = clock;
     this.deliverer = deliverer;
+
+    this.queue = queue(async (command, callback) => {
+      if (command.$scheduler.isDue(clock.now())) {
+        await this.deliver(command);
+      }
+      else {
+        // TODO (brett) - Optimize so the queue isn't going instantaneously
+        this.queue.push(command);
+      }
+      return callback();
+    });
+
+    setImmediate(async () => this.queue.push(await this.store.loadCommands()));
   }
 
   schedule = async ({ service, target, clock, due, command }) => {
@@ -19,21 +34,13 @@ export default class CommandScheduler {
       clock: clock || this.clock,
       attempts: 0
     });
-    await this.store.push(command);
-  }
 
-  commandsDue = async now => {
-    let commands = await this.store.commands();
-    return commands.filter(cmd => cmd.$scheduler.isDue(now));
-  }
-
-  deliverDueCommands = async (now) => {
-    let dueCommands = await this.commandsDue(now);
-    await Promise.all(dueCommands.map(async cmd => await this.deliver(cmd)));
+    await this.queue.push(await this.store.push(command));
   }
 
   deliver = async (command) => {
     try {
+      console.log('delivering', command.$scheduler.service, command.type);
       command.$scheduler.due = null;
       await this.deliverer.deliver({ service: command.$scheduler.service, target: command.$scheduler.target, command });
       command.$scheduler.attempts = command.$scheduler.attempts + 1;

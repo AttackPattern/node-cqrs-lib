@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/AttackPattern/node-cqrs-lib#readme",
   "dependencies": {
+    "async": "2.6.0",
     "node-fetch": "1.7.3",
     "uuid": "3.2.1"
   },
