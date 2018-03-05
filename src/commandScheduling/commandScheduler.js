@@ -16,8 +16,7 @@ export default class CommandScheduler {
         await this.deliver(command);
       }
       else {
-        // TODO (brett) - Optimize so the queue isn't going instantaneously
-        this.queue.push(command);
+        setTimeout(() => this.queue.push(command), 1000);
       }
       return callback();
     });
