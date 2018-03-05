@@ -2,9 +2,10 @@ import uuidV4 from 'uuid/v4';
 
 export default class Repository {
 
-  constructor({ eventStore, aggregate }) {
+  constructor({ eventStore, aggregate, snapshots = true }) {
     this.eventStore = eventStore;
     this.Ctor = aggregate;
+    this.snapshots = snapshots;
     this.subscriptions = [];
   }
 
@@ -16,11 +17,11 @@ export default class Repository {
     let aggregate = new this.Ctor({
       id: aggregateId,
       events,
-      snapshot: snapshot ?.body,
-      version: snapshot ?.version
+      snapshot: snapshot?.body,
+      version: snapshot?.version
     });
 
-    if ((aggregate.$snapshotSchedule ?.every || Number.MAX_VALUE) <= events.length) {
+    if (this.snapshots && (aggregate.$snapshotSchedule?.every || Number.MAX_VALUE) <= events.length) {
       await this.eventStore.saveSnapshot(aggregate);
     }
 
