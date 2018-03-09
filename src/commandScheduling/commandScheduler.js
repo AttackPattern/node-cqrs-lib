@@ -39,7 +39,6 @@ export default class CommandScheduler {
 
   deliver = async (command) => {
     try {
-      console.log('delivering', command.$scheduler.service, command.type);
       command.$scheduler.due = null;
       await this.deliverer.deliver({ service: command.$scheduler.service, target: command.$scheduler.target, command });
       command.$scheduler.attempts = command.$scheduler.attempts + 1;
