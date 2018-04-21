@@ -37,17 +37,30 @@ export default class CommandScheduler {
     await this.queue.push(await this.store.push(command));
   }
 
-  deliver = async (command) => {
+  execute = async ({ service, target, command }) => {
+    command.$identity = Identity.system;
+    command.$scheduler = new Schedule({
+      service: service,
+      target: target,
+      attempts: 0
+    });
+
+    await this.deliver(command, true);
+  }
+
+  deliver = async (command, immediate = false) => {
     try {
       command.$scheduler.due = null;
       await this.deliverer.deliver({ service: command.$scheduler.service, target: command.$scheduler.target, command });
       command.$scheduler.attempts = command.$scheduler.attempts + 1;
 
-      if (command.$scheduler.due) {
-        await this.store.retry(command);
-      }
-      else {
-        await this.store.complete(command);
+      if (!immediate) {
+        if (command.$scheduler.due) {
+          await this.store.retry(command);
+        }
+        else {
+          await this.store.complete(command);
+        }
       }
     }
     catch (error) {
@@ -57,12 +70,14 @@ export default class CommandScheduler {
         throw error;
       }
       await error.handler.handleDeliveryError(failure, error.aggregate);
-      if (command.$scheduler.due) {
-        await this.store.retry(command);
-      }
-      else if (failure.cancelled) {
-        console.log('retry cancelled');
-        await this.store.complete(command);
+      if (!immediate) {
+        if (command.$scheduler.due) {
+          await this.store.retry(command);
+        }
+        else if (failure.cancelled) {
+          console.log('retry cancelled');
+          await this.store.complete(command);
+        }
       }
     }
   }
