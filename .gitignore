@@ -39,3 +39,5 @@ jspm_packages
 .node_repl_history
 yarn.lock
 wallaby.js
+
+.idea
