@@ -9,7 +9,7 @@ export AggregateCommandHandler from './commandHandling/aggregateCommandHandler';
 export Repository from './repository';
 export ValidationError from './validationError';
 export AuthorizationError from './auth/authorizationError';
-export CommandScheduler from './commandScheduling/commandScheduler';
+export RabbitScheduler from './commandScheduling/rabbitScheduler';
 export RealWorldClock from './commandScheduling/realWorldClock';
 export Schedule from './commandScheduling/schedule';
 export CommandHandlerError from './commandScheduling/commandHandlerError';
