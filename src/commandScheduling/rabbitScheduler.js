@@ -1,6 +1,6 @@
 import Identity from '../auth/identity';
 import Schedule from './schedule';
-import CommandFailure, { Retry, Cancel } from './commandFailure';
+import CommandFailure, { Retry } from './commandFailure';
 
 export default class RabbitScheduler {
 
