@@ -17,9 +17,12 @@ export default class RabbitScheduler {
           .then(() => {
             channel.ack(message);
           })
-          .catch(error => {
-            console.log('retry', error.failureAction instanceof Retry && !message.fields.redelivered);
-            channel.nack(message, false, error.failureAction instanceof Retry && !message.fields.redelivered);
+          .catch(async error => {
+            let failure = new CommandFailure({ error, command });
+            if (error.handler) {
+              await error.handler.handleDeliveryError(failure, error.aggregate);
+            }
+            channel.nack(message, false, failure.failureAction instanceof Retry && !message.fields.redelivered);
           });
       })
     );
@@ -34,8 +37,7 @@ export default class RabbitScheduler {
       service: service,
       target: target,
       due: due,
-      clock: clock || this.clock,
-      attempts: 0
+      clock: clock || this.clock
     });
 
     await this.publish(JSON.stringify(command));
@@ -45,8 +47,7 @@ export default class RabbitScheduler {
     command.$identity = Identity.system;
     command.$scheduler = new Schedule({
       service: service,
-      target: target,
-      attempts: 0
+      target: target
     });
 
     await this.deliver(command);
@@ -60,12 +61,7 @@ export default class RabbitScheduler {
         resolve();
       }
       catch (error) {
-        let failure = new CommandFailure({ error, command });
-        if (error.handler) {
-          console.log('calling handler error handler');
-          await error.handler.handleDeliveryError(failure, error.aggregate);
-        }
-        reject(failure);
+        reject(error);
       }
     });
   }
