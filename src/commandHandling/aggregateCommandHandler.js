@@ -1,3 +1,5 @@
+import ValidationError from '../validationError';
+
 export default class AggregateCommandHandler {
 
   constructor(Command) {
@@ -42,8 +44,12 @@ export default class AggregateCommandHandler {
   validate(command, aggregate) { }
 
   handleDeliveryError = async (failure) => {
-    console.log('delivery failure', failure);
-    failure.cancel();
+    if (!(failure.error instanceof ValidationError)) {
+      failure.retry();
+    }
+    else {
+      failure.cancel();
+    }
   }
 }
 

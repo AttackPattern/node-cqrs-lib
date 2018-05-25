@@ -1,6 +1,6 @@
 import Identity from '../auth/identity';
 import Schedule from './schedule';
-import CommandFailure from './commandFailure';
+import CommandFailure, { Retry, Cancel } from './commandFailure';
 
 export default class RabbitScheduler {
 
@@ -13,19 +13,22 @@ export default class RabbitScheduler {
     channel.assertQueue(q, { durable: true }).then(() =>
       channel.consume(q, async message => {
         const command = JSON.parse(message.content);
-        console.log('cmd', command);
-        await this.deliver(command);
-        await channel.ack(message);
+        await this.deliver(command)
+          .then(() => {
+            channel.ack(message);
+          })
+          .catch(error => {
+            console.log('retry', error.failureAction instanceof Retry && !message.fields.redelivered);
+            channel.nack(message, false, error.failureAction instanceof Retry && !message.fields.redelivered);
+          });
       })
     );
     this.publish = async message => {
-      console.log('publishing', message);
       await channel.sendToQueue(q, new Buffer(message));
     };
   }
 
   schedule = async ({ service, target, clock, due, command }) => {
-    console.log('rabbit.schedule');
     command.$identity = Identity.system;
     command.$scheduler = new Schedule({
       service: service,
@@ -34,10 +37,8 @@ export default class RabbitScheduler {
       clock: clock || this.clock,
       attempts: 0
     });
-    console.log('to call publish');
-    await this.publish(JSON.stringify(command));
 
-    // await this.queue.push(await this.store.push(command));
+    await this.publish(JSON.stringify(command));
   }
 
   execute = async ({ service, target, command }) => {
@@ -48,40 +49,24 @@ export default class RabbitScheduler {
       attempts: 0
     });
 
-    await this.deliver(command, true);
+    await this.deliver(command);
   }
 
-  deliver = async (command, immediate = false) => {
-    try {
-      command.$scheduler.due = null;
-      await this.deliverer.deliver({ service: command.$scheduler.service, target: command.$scheduler.target, command });
-      command.$scheduler.attempts = command.$scheduler.attempts + 1;
-
-      // if (!immediate) {
-      //   if (command.$scheduler.due) {
-      //     await this.store.retry(command);
-      //   }
-      //   else {
-      //     await this.store.complete(command);
-      //   }
-      // }
-    }
-    catch (error) {
-      let failure = new CommandFailure({ error, command });
-      if (!error.handler) {
-        console.log('Unhandled error', error);
-        throw error;
+  deliver = async (command) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        command.$scheduler.due = null;
+        await this.deliverer.deliver({ service: command.$scheduler.service, target: command.$scheduler.target, command });
+        resolve();
       }
-      await error.handler.handleDeliveryError(failure, error.aggregate);
-      // if (!immediate) {
-      //   if (command.$scheduler.due) {
-      //     await this.store.retry(command);
-      //   }
-      //   else if (failure.cancelled) {
-      //     console.log('retry cancelled');
-      //     await this.store.complete(command);
-      //   }
-      // }
-    }
+      catch (error) {
+        let failure = new CommandFailure({ error, command });
+        if (error.handler) {
+          console.log('calling handler error handler');
+          await error.handler.handleDeliveryError(failure, error.aggregate);
+        }
+        reject(failure);
+      }
+    });
   }
 }
