@@ -54,5 +54,5 @@ export default class AggregateCommandHandler {
 }
 
 function asArray(events = []) {
-  return Array.isArray(events) ? events : [events];
+  return (Array.isArray(events) ? events : [events]).filter(e => !!e);
 }

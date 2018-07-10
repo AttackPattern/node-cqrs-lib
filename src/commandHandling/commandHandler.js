@@ -38,5 +38,5 @@ export default class CommandHandler {
 }
 
 function asArray(events = []) {
-  return Array.isArray(events) ? events : [events];
+  return (Array.isArray(events) ? events : [events]).filter(e => !!e);
 }
