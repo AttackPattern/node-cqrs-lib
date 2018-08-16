@@ -1,5 +1,5 @@
 {
-  "name": "@attackpattern/node-cqrs-lib",
+  "name": "@facetdev/node-cqrs-lib",
   "version": "0.7.5",
   "description": "Library of base classes for Node CQRS",
   "main": "index.js",
@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/AttackPattern/node-cqrs-lib.git"
   },
-  "author": "Attack Pattern <hello@attackpattern.com>",
+  "author": "Facet Development <hello@facetdev.com>",
   "license": "MIT",
   "engines": {
     "node": ">=6.9.5"
