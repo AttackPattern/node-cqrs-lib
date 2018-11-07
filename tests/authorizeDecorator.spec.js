@@ -52,6 +52,11 @@ describe('Authorize Decorator', () => {
     const testClass = new SystemTestClass('sysTest');
     expect(testClass.value).to.equal('sysTest');
   });
+
+  it('supports derived identity class rights', async () => {
+    const testClass = new TestClass();
+    await expect(testClass.authorize({ $identity: new TestIdentity({}, false) })).to.be.fulfilled;
+  });
 });
 
 @authorize({ rights: ['rightA'], message: 'Failed auth' })
@@ -73,4 +78,14 @@ class SystemTestClass {
     constructor(value) {
       this.value = value;
     }
+}
+
+class TestIdentity extends Identity {
+  constructor(data) {
+    super (data);
+  }
+
+  get rights() {
+    return ['rightA'];
+  }
 }
