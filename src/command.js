@@ -4,7 +4,7 @@ export default class Command {
 
   constructor(data = {}) {
     this.$position = data.$position;
-    this.$identity = new Identity(data.$identity) || Identity.anonymous;
+    this.$identity = data.$identity || Identity.anonymous;
     this.$timestamp = data.$timestamp || new Date();
     this.$scheduler = data.$scheduler || {};
   }
