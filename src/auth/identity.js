@@ -4,11 +4,11 @@ export default class Identity {
     this.userId = data.userId;
     this.claims = data.claims || {};
     this.version = data.version;
-    this._rights = data.rights || [];
+    this._rights = data.rights;
   }
 
   get rights() {
-    return this._rights;
+    return this._rights || [];
   }
 
   static anonymous = new Identity({
