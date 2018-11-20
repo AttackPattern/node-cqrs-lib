@@ -6,6 +6,7 @@ import Identity from '../src/auth/identity';
 import authorize from '../src/auth/authorizeDecorator';
 import anonymous from '../src/auth/anonymousDecorator';
 import system from '../src/auth/systemDecorator';
+import AuthorizationError from '../src/auth/authorizationError';
 
 describe('Authorize Decorator', () => {
   it('allows call when user has correct right', async () => {
@@ -57,6 +58,11 @@ describe('Authorize Decorator', () => {
     const testClass = new TestClass();
     await expect(testClass.authorize({ $identity: new TestIdentity({}, false) })).to.be.fulfilled;
   });
+
+  it('calls base authorize method along with attribute', async () => {
+    const testClass = new TestClassWithAuthorizeMethod(false);
+    await expect(testClass.authorize({ $identity: new TestIdentity({}, false) })).to.be.rejectedWith('Pass is false');
+  })
 });
 
 @authorize({ rights: ['rightA'], message: 'Failed auth' })
@@ -75,14 +81,27 @@ class AnonTestClass {
 
 @system({ message: 'Not system' })
 class SystemTestClass {
-    constructor(value) {
-      this.value = value;
+  constructor(value) {
+    this.value = value;
+  }
+}
+
+@authorize({ rights: ['rightA'] })
+class TestClassWithAuthorizeMethod {
+  constructor(pass) {
+    this.pass = pass;
+  }
+
+  authorize = async (command, aggregate) => {
+    if (!this.pass) {
+      throw new AuthorizationError({ command, aggregate, message: 'Pass is false' });
     }
+  }
 }
 
 class TestIdentity extends Identity {
   constructor(data) {
-    super (data);
+    super(data);
   }
 
   get rights() {
