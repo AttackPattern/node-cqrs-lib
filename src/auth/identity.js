@@ -4,6 +4,7 @@ export default class Identity {
     this.userId = data.userId;
     this.claims = data.claims || {};
     this.version = data.version;
+    this.status = data.status;
     this._rights = data.rights;
   }
 
