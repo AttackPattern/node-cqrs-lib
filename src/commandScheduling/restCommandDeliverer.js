@@ -25,7 +25,7 @@ export default class RestCommandDeliverer {
       headers: {
         'Content-Type': 'application/json',
         authorization: id,
-        position: command.$position && new Buffer(JSON.stringify(command.$position)).toString('base64')
+        position: command.$position && Buffer.from(JSON.stringify(command.$position)).toString('base64')
       },
       body: JSON.stringify(command)
     })).json();

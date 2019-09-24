@@ -27,7 +27,7 @@ export default class RabbitScheduler {
       })
     );
     this.publish = async message => {
-      await channel.sendToQueue(q, new Buffer(message));
+      await channel.sendToQueue(q, Buffer.from(message));
     };
   }
 

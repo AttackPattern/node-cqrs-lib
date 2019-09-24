@@ -22,5 +22,7 @@ export default class Identity {
   })
   isSystem = () => this.userId === Identity.system.userId
 
+  isLogisticsAdmin = () => this.status === 'logisticsAdmin' || this.claims?.systemRoles?.includes('logisticsAdmin')
+
   isUser = () => !(this.isAnonymous() || this.isSystem())
 }
