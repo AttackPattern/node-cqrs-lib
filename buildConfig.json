@@ -9,7 +9,7 @@
 
   "TST_UNIT": "./tests/**/*.js",
   "MOCHA": {
-    "require": ["@babel/register", "@babel/polyfill"],
+    "require": ["@babel/register", "core-js/stable"],
     "reporter": "spec"
   },
   "ISTANBUL": {

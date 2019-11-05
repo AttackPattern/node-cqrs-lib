@@ -10,6 +10,7 @@ export Repository from './repository';
 export ValidationError from './validationError';
 export AuthorizationError from './auth/authorizationError';
 export RabbitScheduler from './commandScheduling/rabbitScheduler';
+export TaskScheduler from './commandScheduling/taskScheduler';
 export RealWorldClock from './commandScheduling/realWorldClock';
 export Schedule from './commandScheduling/schedule';
 export CommandHandlerError from './commandScheduling/commandHandlerError';
