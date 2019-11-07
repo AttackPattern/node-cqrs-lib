@@ -43,7 +43,6 @@ export default class TaskScheduler {
       task.scheduleTime = { seconds: Date.now() / 1000 + seconds };
     }
     try {
-    console.log('creating gcloud task', task);
     const [response] = await this.client.createTask({ parent, task });
     console.log('created gcloud task');
     }
