@@ -6,10 +6,15 @@ export default class Identity {
     this.version = data.version;
     this.status = data.status;
     this._rights = data.rights;
+    this._features = data.features;
   }
 
   get rights() {
     return this._rights || [];
+  }
+
+  get features() {
+    return this._features || [];
   }
 
   static anonymous = new Identity({
