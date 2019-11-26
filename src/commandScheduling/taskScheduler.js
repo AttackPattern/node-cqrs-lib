@@ -14,22 +14,26 @@ export default class TaskScheduler {
   * @param String project - the gcloud project the task scheudler is in
   * @param String queue - the name of the queue (unique for dev/staging/production)
   * @param String rootUrl - the rootUrl for the callback.  it varies specifically for dev as
+  * @param String secret - used for JSON Web token encoding/decoding to verify a later received schedule is valid
   * the dev environment needs to create a dynamic proxy tunnel into the local network using ngrok
   **/
-  constructor({ credentials, deliveryPath, location = 'us-central1', project, queue, rootUrl }) {
+  constructor({ credentials, deliveryPath, location = 'us-central1', project, queue, rootUrl, secret }) {
     this.project = project;
     this.queue = queue;
     this.location = location;
     this.deliveryUrl = `${rootUrl}/${deliveryPath}`;
     this.client = new v2beta3.CloudTasksClient({ credentials });
-
+    this.serviceAccountEmail = credentials.client_email;
+    this.secret = secret;
   }
 
   schedule = async ({ aggregate, service, target, seconds, command }) => {
     command.$identity = Identity.system;
     command.$scheduler = new Schedule({
+      secret: this.secret,
       service: service || aggregate,
-      target: target
+      target: target,
+      seconds
     });
     const parent = this.client.queuePath(this.project, this.location, this.queue);
     const task = {
