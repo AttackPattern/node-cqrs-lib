@@ -48,7 +48,7 @@ export default class TaskScheduler {
     }
     try {
     const [response] = await this.client.createTask({ parent, task });
-    console.log('created gcloud task');
+    console.log(`created gcloud task ${service || aggregate}/${target}`);
     }
     catch (ex) {
       console.error('Error creating Gcloud Task', ex);
