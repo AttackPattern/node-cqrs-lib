@@ -7,6 +7,7 @@ export default class Identity {
     this.status = data.status;
     this._rights = data.rights;
     this._features = data.features;
+    this.enabled2fa = data.enabled2FA;
   }
 
   get rights() {
